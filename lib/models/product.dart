@@ -1,0 +1,9 @@
+import 'dart:ui';
+
+//IF WE ARE GOING TO GET ALL THE PRODUCT DATA FROM THE DATABASE, I DON'T KNOW IF WE
+//SHOULD USE THIS KIND OF A PRODUCT CLASS, NEED TO DISCUSS WHAT WE NEED TO DO
+class Product {
+  var image = <Image>[];
+  var name;
+  //TO DO
+}

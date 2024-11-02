@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:metal_gym_mobile_application/core/app_colors.dart';
 
 import 'pages/home.dart';
 
@@ -15,11 +16,44 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
       theme: ThemeData(
-        textTheme: Theme.of(context).textTheme.apply(
-          fontSizeFactor: 1.1,
-          fontSizeDelta: 2.0,
-        ),
-        fontFamily: "Roboto",
+          //GLOBAL THEME - ADD THE GENERAL THEMES
+          //Only add most general themes here, if you want to change
+          //a little specific detail about a widget, you can do it
+          //in their respective theme part (not here)
+          brightness: Brightness.dark,
+          primaryColor: AppColors.primary,
+          scaffoldBackgroundColor: AppColors.background,
+          fontFamily: "Roboto",
+          bottomNavigationBarTheme: const BottomNavigationBarThemeData(
+            backgroundColor: AppColors.primary,
+            selectedItemColor: AppColors.background,
+            enableFeedback: true,
+          ),
+          textTheme: const TextTheme(
+              bodyMedium: TextStyle(
+                  color: Colors.black
+              )
+          ),
+          searchBarTheme: const SearchBarThemeData(
+            backgroundColor: WidgetStatePropertyAll(AppColors.secondary),
+          ),
+          dropdownMenuTheme: const DropdownMenuThemeData(
+            menuStyle: MenuStyle(
+                backgroundColor: WidgetStatePropertyAll(AppColors.primary),
+                padding: WidgetStatePropertyAll(EdgeInsets.zero),
+            ),
+            inputDecorationTheme: InputDecorationTheme(
+              border: OutlineInputBorder(borderRadius: BorderRadius.all(Radius.circular(100))),
+              constraints: BoxConstraints(
+                  minHeight: 40,
+                  maxHeight: 65
+              ),
+            ),
+            textStyle: TextStyle(
+                color: AppColors.secondary,
+                fontSize: 14
+            ),
+          )
       ),
       home: const HomePage(),
     );
