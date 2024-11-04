@@ -14,7 +14,7 @@ class _ShopPageState extends State<ShopPage> {
     return Scaffold(
       appBar: AppBar(
         title: const Text(
-          'Metal GYM',
+          'MetalGYM',
           style: TextStyle(
             fontFamily: "Designer",
             color: AppColors.background,

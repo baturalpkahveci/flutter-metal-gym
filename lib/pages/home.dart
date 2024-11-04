@@ -36,6 +36,7 @@ class _HomePageState extends State<HomePage> {
             setState(() => _currentIndex = index);
           },
           children: <Widget>[ //PAGES WILL BE ADDED HERE
+            Container(color: Colors.blue,),
             ShopPage(),
             Container(color: Colors.red,),
             Container(color: Colors.green,),
@@ -45,13 +46,20 @@ class _HomePageState extends State<HomePage> {
       bottomNavigationBar: BottomNavyBar(
         backgroundColor: AppColors.primary,
         animationDuration: const Duration(milliseconds: 100),
-        showInactiveTitle: false,
+        showInactiveTitle: true,
+        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
         selectedIndex: _currentIndex,
         onItemSelected: (index) {
           setState(() => _currentIndex = index);
           _pageController.jumpToPage(index);
         },
         items: <BottomNavyBarItem>[
+          BottomNavyBarItem(
+            title: const Text('Kategoriler'),
+            icon: const Icon(Icons.apps_outlined),
+            activeColor: AppColors.background,
+            inactiveColor: AppColors.secondary,
+          ),
           BottomNavyBarItem(
               title: const Text('Mağaza'),
               icon: const Icon(Icons.shop_2),
