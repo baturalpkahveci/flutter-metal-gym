@@ -1,6 +1,7 @@
 import 'package:bottom_navy_bar/bottom_navy_bar.dart';
 import 'package:flutter/material.dart';
 import 'package:metal_gym_mobile_application/core/app_colors.dart';
+import 'package:metal_gym_mobile_application/pages/categories.dart';
 import 'package:metal_gym_mobile_application/pages/shop.dart';
 
 class HomePage extends StatefulWidget {
@@ -36,7 +37,7 @@ class _HomePageState extends State<HomePage> {
             setState(() => _currentIndex = index);
           },
           children: <Widget>[ //PAGES WILL BE ADDED HERE
-            Container(color: Colors.blue,),
+            CategoriesPage(),
             ShopPage(),
             Container(color: Colors.red,),
             Container(color: Colors.green,),
