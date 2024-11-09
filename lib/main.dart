@@ -53,6 +53,22 @@ class MyApp extends StatelessWidget {
                 color: AppColors.secondary,
                 fontSize: 14
             ),
+          ),
+          appBarTheme: AppBarTheme(
+            shadowColor: Colors.black,
+            iconTheme: IconThemeData(
+              color: AppColors.background
+            ),
+            color: AppColors.primary,
+            titleTextStyle: TextStyle(
+              fontFamily: "Designer",
+              color: AppColors.background,
+              fontSize: 30,
+              shadows: [Shadow(
+                  color: Colors.white,
+                  blurRadius: 10.0
+              )],
+            ),
           )
       ),
       home: const HomePage(),

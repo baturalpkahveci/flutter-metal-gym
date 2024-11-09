@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:metal_gym_mobile_application/common/widgets/product_box.dart';
 import 'package:metal_gym_mobile_application/core/app_colors.dart';
 import 'package:url_launcher/url_launcher.dart';
 
@@ -16,23 +17,21 @@ class ShopPage extends StatefulWidget {
 class _ShopPageState extends State<ShopPage> {
   @override
   Widget build(BuildContext context) {
+
+    // Calculate screen dimensions
+    final screenWidth = MediaQuery.of(context).size.width;
+    final screenHeight = MediaQuery.of(context).size.height;
+
+    // Define the number of columns based on screen width
+    int crossAxisCount = (screenWidth / 150).floor(); // Adjust 200 based on your preferred item width
+    crossAxisCount = crossAxisCount < 1 ? 1 : crossAxisCount; // Ensure at least 1 column
+
+    // Calculate childAspectRatio for each item to be responsive
+    double childAspectRatio = screenWidth / (screenHeight / 1.5);
+    
     return Scaffold(
       appBar: AppBar(
-        title: const Text(
-          'MetalGYM',
-          style: TextStyle(
-            fontFamily: "Designer",
-            color: AppColors.background,
-            fontSize: 30,
-            shadows: [Shadow(
-                color: Colors.white,
-                blurRadius: 10.0
-            )],
-          ),
-        ),
-        backgroundColor: AppColors.primary,
-        shadowColor: Colors.black,
-        elevation: 8,
+        title: const Text('MetalGYM'),
         actions: [
           IconButton(
               onPressed: () {
@@ -71,17 +70,18 @@ class _ShopPageState extends State<ShopPage> {
       ),
       backgroundColor: AppColors.background,
       body: Container(
-        padding: EdgeInsets.all(20),
+        padding: const EdgeInsets.symmetric(horizontal: 15),
         child: Column(
           verticalDirection: VerticalDirection.down,
           children: [
+            const SizedBox(height: 15),
             SearchBar(
               leading: Container(
                 padding: EdgeInsets.all(10),
                 child: Icon(Icons.search),
               ),
             ),
-            const SizedBox(height: 10,),
+            const SizedBox(height: 10),
             const Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
@@ -107,6 +107,33 @@ class _ShopPageState extends State<ShopPage> {
                     ]
                 )
               ],
+            ),
+            const SizedBox(height: 10),
+            Container(
+              child: Expanded(
+                child: GridView(
+                    gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                        crossAxisCount: crossAxisCount,
+                        childAspectRatio: childAspectRatio,
+                        crossAxisSpacing: 8.0,
+                        mainAxisSpacing: 8.0
+                    ),
+                    children: [
+                      ProductBox(),
+                      ProductBox(),
+                      ProductBox(),
+                      ProductBox(),
+                      ProductBox(),
+                      ProductBox(),
+                      ProductBox(),
+                      ProductBox(),
+                      ProductBox(),
+                      ProductBox(),
+                      ProductBox(),
+                      ProductBox(),
+                    ],
+                )
+              ),
             ),
           ],
         ),

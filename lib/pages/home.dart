@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:metal_gym_mobile_application/core/app_colors.dart';
 import 'package:metal_gym_mobile_application/pages/categories.dart';
 import 'package:metal_gym_mobile_application/pages/shop.dart';
+import 'package:metal_gym_mobile_application/pages/shopping_cart.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({super.key});
@@ -39,7 +40,7 @@ class _HomePageState extends State<HomePage> {
           children: <Widget>[ //PAGES WILL BE ADDED HERE
             CategoriesPage(),
             ShopPage(),
-            Container(color: Colors.red,),
+            ShoppingCart(),
             Container(color: Colors.green,),
           ],
         ),
