@@ -72,7 +72,7 @@ class ShoppingCart extends StatelessWidget {
                       ),
                       onPressed: null,
                       child: Text(
-                          "Satıl Al",
+                          "Satın Al",
                           style: TextStyle(
                             color: AppColors.background,
                             fontSize: 20

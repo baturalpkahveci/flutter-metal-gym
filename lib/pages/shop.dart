@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:metal_gym_mobile_application/common/widgets/product_box.dart';
 import 'package:metal_gym_mobile_application/core/app_colors.dart';
 import 'package:url_launcher/url_launcher.dart';
+import '../services//product_provider.dart';
+import 'package:provider/provider.dart';
 
 class ShopPage extends StatefulWidget {
   const ShopPage({super.key});
@@ -15,8 +17,11 @@ class ShopPage extends StatefulWidget {
 }
 
 class _ShopPageState extends State<ShopPage> {
+  String _searchQuery = '';
+
   @override
   Widget build(BuildContext context) {
+    final productProvider = Provider.of<ProductProvider>(context);
 
     // Calculate screen dimensions
     final screenWidth = MediaQuery.of(context).size.width;
@@ -28,7 +33,7 @@ class _ShopPageState extends State<ShopPage> {
 
     // Calculate childAspectRatio for each item to be responsive
     double childAspectRatio = screenWidth / (screenHeight / 1.5);
-    
+
     return Scaffold(
       appBar: AppBar(
         title: const Text('MetalGYM'),
@@ -109,9 +114,10 @@ class _ShopPageState extends State<ShopPage> {
               ],
             ),
             const SizedBox(height: 10),
-            Container(
+            //GET PRODUCTS
+            productProvider.isLoading ? Center(child: CircularProgressIndicator()) : Container(
               child: Expanded(
-                child: GridView(
+                  child: GridView(
                     gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
                         crossAxisCount: crossAxisCount,
                         childAspectRatio: childAspectRatio,
@@ -132,9 +138,9 @@ class _ShopPageState extends State<ShopPage> {
                       ProductBox(),
                       ProductBox(),
                     ],
-                )
+                  )
               ),
-            ),
+            )
           ],
         ),
       ),

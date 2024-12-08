@@ -1,10 +1,17 @@
 import 'package:flutter/material.dart';
 import 'package:metal_gym_mobile_application/core/app_colors.dart';
-
+import 'package:metal_gym_mobile_application/services/product_provider.dart';
+import 'package:provider/provider.dart';
 import 'pages/home.dart';
 
+
 void main() {
-  runApp(const MyApp());
+  runApp(
+      ChangeNotifierProvider(
+          create: (_) => ProductProvider(),
+          child: const MyApp(),
+      )
+  );
 }
 
 class MyApp extends StatelessWidget {
@@ -69,7 +76,7 @@ class MyApp extends StatelessWidget {
                   blurRadius: 10.0
               )],
             ),
-          )
+          ),
       ),
       home: const HomePage(),
     );
