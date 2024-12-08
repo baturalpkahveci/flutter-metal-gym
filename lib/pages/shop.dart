@@ -117,28 +117,20 @@ class _ShopPageState extends State<ShopPage> {
             //GET PRODUCTS
             productProvider.isLoading ? Center(child: CircularProgressIndicator()) : Container(
               child: Expanded(
-                  child: GridView(
-                    gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                  child: GridView.builder(
+                      gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
                         crossAxisCount: crossAxisCount,
                         childAspectRatio: childAspectRatio,
                         crossAxisSpacing: 8.0,
-                        mainAxisSpacing: 8.0
-                    ),
-                    children: [
-                      ProductBox(),
-                      ProductBox(),
-                      ProductBox(),
-                      ProductBox(),
-                      ProductBox(),
-                      ProductBox(),
-                      ProductBox(),
-                      ProductBox(),
-                      ProductBox(),
-                      ProductBox(),
-                      ProductBox(),
-                      ProductBox(),
-                    ],
+                        mainAxisSpacing: 8.0,
+                      ),
+                      itemBuilder: (context, index) {
+                        final product = productProvider.products[index];
+                        return ProductBox(product: product);
+                      },
                   )
+
+
               ),
             )
           ],

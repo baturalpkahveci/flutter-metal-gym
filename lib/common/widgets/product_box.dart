@@ -3,7 +3,8 @@ import 'package:metal_gym_mobile_application/core/app_colors.dart';
 import 'package:metal_gym_mobile_application/models/product.dart';
 
 class ProductBox extends StatelessWidget {
-  const ProductBox({super.key});
+  const ProductBox({super.key, required this.product});
+  final Product product;
 
   @override
   Widget build(BuildContext context) {
@@ -13,12 +14,12 @@ class ProductBox extends StatelessWidget {
           borderRadius: BorderRadius.all(Radius.circular(15.0)),
           child: Container(
             constraints: BoxConstraints(maxHeight: 200),
-            child: Expanded(child: Image(image: AssetImage("assets/images/promotional1.jpg"))),
+            child: Expanded(child: Image.network(product.imageUrl)),
           ),
         ),
         SizedBox(height: 4),
         Text(
-            "Example_Product_Name",
+            product.name,
             style: TextStyle(
               shadows: [
                 Shadow(
@@ -32,7 +33,7 @@ class ProductBox extends StatelessWidget {
           mainAxisAlignment: MainAxisAlignment.spaceEvenly,
           children: [
             Text(
-              "00000.00" + " TL",
+              "${product.price} TL",
               style: TextStyle(
                   color: AppColors.priceColor,
               ),
