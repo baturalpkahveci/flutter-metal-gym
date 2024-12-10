@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:metal_gym_mobile_application/common/widgets/product_box.dart';
 import 'package:metal_gym_mobile_application/core/app_colors.dart';
 import 'package:url_launcher/url_launcher.dart';
-import '../services//product_provider.dart';
+import 'package:metal_gym_mobile_application/services/product_provider.dart';
 import 'package:provider/provider.dart';
 
 class ShopPage extends StatefulWidget {
@@ -20,7 +20,15 @@ class _ShopPageState extends State<ShopPage> {
   String _searchQuery = '';
 
   @override
-  Widget build(BuildContext context) {
+  void initState() {
+    super.initState();
+    // Access the ProductProvider and fetch products
+    final productProvider = Provider.of<ProductProvider>(context, listen: false);
+    productProvider.fetchProducts();
+  }
+
+  @override
+  Widget build(BuildContext newContext) {
     final productProvider = Provider.of<ProductProvider>(context);
 
     // Calculate screen dimensions
@@ -85,6 +93,13 @@ class _ShopPageState extends State<ShopPage> {
                 padding: EdgeInsets.all(10),
                 child: Icon(Icons.search),
               ),
+              onSubmitted: (value) {
+                setState(() {
+                  _searchQuery = value;
+                });
+                print("Submitted query: $_searchQuery");
+                productProvider.fetchProducts(searchTerm: _searchQuery);
+              },
             ),
             const SizedBox(height: 10),
             const Row(
@@ -115,7 +130,7 @@ class _ShopPageState extends State<ShopPage> {
             ),
             const SizedBox(height: 10),
             //GET PRODUCTS
-            productProvider.isLoading ? Center(child: CircularProgressIndicator()) : Container(
+            productProvider.isLoading ? CircularProgressIndicator() : Container(
               child: Expanded(
                   child: GridView.builder(
                       gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(

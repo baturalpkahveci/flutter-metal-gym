@@ -3,15 +3,13 @@ import 'package:metal_gym_mobile_application/core/app_colors.dart';
 import 'package:metal_gym_mobile_application/services/product_provider.dart';
 import 'package:provider/provider.dart';
 import 'pages/home.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 
-
-void main() {
-  runApp(
-      ChangeNotifierProvider(
-          create: (_) => ProductProvider(),
-          child: const MyApp(),
-      )
-  );
+Future<void> main() async{
+  WidgetsFlutterBinding.ensureInitialized(); // Ensure Flutter bindings are initialized
+  await dotenv.load(fileName: ".env"); // Load the .env file
+  print(dotenv.env); // Debug: Print loaded variables
+  runApp(const MyApp());
 }
 
 class MyApp extends StatelessWidget {
@@ -20,65 +18,73 @@ class MyApp extends StatelessWidget {
   // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      debugShowCheckedModeBanner: false,
-      theme: ThemeData(
-          //GLOBAL THEME - ADD THE GENERAL THEMES
-          //Only add most general themes here, if you want to change
-          //a little specific detail about a widget, you can do it
-          //in their respective theme part (not here)
-          brightness: Brightness.dark,
-          primaryColor: AppColors.primary,
-          scaffoldBackgroundColor: AppColors.background,
-          fontFamily: "Roboto",
-          bottomNavigationBarTheme: const BottomNavigationBarThemeData(
-            backgroundColor: AppColors.primary,
-            selectedItemColor: AppColors.background,
-            enableFeedback: true,
-          ),
-          textTheme: const TextTheme(
-              bodyMedium: TextStyle(
-                  color: Colors.black
-              )
-          ),
-          searchBarTheme: const SearchBarThemeData(
-            backgroundColor: WidgetStatePropertyAll(AppColors.secondary),
-          ),
-          dropdownMenuTheme: const DropdownMenuThemeData(
-            menuStyle: MenuStyle(
-                backgroundColor: WidgetStatePropertyAll(AppColors.primary),
-                padding: WidgetStatePropertyAll(EdgeInsets.zero),
+    return MultiProvider(
+      providers: [
+        //PROVIDERS
+        ChangeNotifierProvider(
+            create: (context) => ProductProvider()
+        )
+      ],
+      child: MaterialApp(
+        debugShowCheckedModeBanner: false,
+        theme: ThemeData(
+            //GLOBAL THEME - ADD THE GENERAL THEMES
+            //Only add most general themes here, if you want to change
+            //a little specific detail about a widget, you can do it
+            //in their respective theme part (not here)
+            brightness: Brightness.dark,
+            primaryColor: AppColors.primary,
+            scaffoldBackgroundColor: AppColors.background,
+            fontFamily: "Roboto",
+            bottomNavigationBarTheme: const BottomNavigationBarThemeData(
+              backgroundColor: AppColors.primary,
+              selectedItemColor: AppColors.background,
+              enableFeedback: true,
             ),
-            inputDecorationTheme: InputDecorationTheme(
-              border: OutlineInputBorder(borderRadius: BorderRadius.all(Radius.circular(100))),
-              constraints: BoxConstraints(
-                  minHeight: 40,
-                  maxHeight: 65
+            textTheme: const TextTheme(
+                bodyMedium: TextStyle(
+                    color: Colors.black
+                )
+            ),
+            searchBarTheme: const SearchBarThemeData(
+              backgroundColor: WidgetStatePropertyAll(AppColors.secondary),
+            ),
+            dropdownMenuTheme: const DropdownMenuThemeData(
+              menuStyle: MenuStyle(
+                  backgroundColor: WidgetStatePropertyAll(AppColors.primary),
+                  padding: WidgetStatePropertyAll(EdgeInsets.zero),
+              ),
+              inputDecorationTheme: InputDecorationTheme(
+                border: OutlineInputBorder(borderRadius: BorderRadius.all(Radius.circular(100))),
+                constraints: BoxConstraints(
+                    minHeight: 40,
+                    maxHeight: 65
+                ),
+              ),
+              textStyle: TextStyle(
+                  color: AppColors.secondary,
+                  fontSize: 14
               ),
             ),
-            textStyle: TextStyle(
-                color: AppColors.secondary,
-                fontSize: 14
+            appBarTheme: AppBarTheme(
+              shadowColor: Colors.black,
+              iconTheme: IconThemeData(
+                color: AppColors.background
+              ),
+              color: AppColors.primary,
+              titleTextStyle: TextStyle(
+                fontFamily: "Designer",
+                color: AppColors.background,
+                fontSize: 30,
+                shadows: [Shadow(
+                    color: Colors.white,
+                    blurRadius: 10.0
+                )],
+              ),
             ),
-          ),
-          appBarTheme: AppBarTheme(
-            shadowColor: Colors.black,
-            iconTheme: IconThemeData(
-              color: AppColors.background
-            ),
-            color: AppColors.primary,
-            titleTextStyle: TextStyle(
-              fontFamily: "Designer",
-              color: AppColors.background,
-              fontSize: 30,
-              shadows: [Shadow(
-                  color: Colors.white,
-                  blurRadius: 10.0
-              )],
-            ),
-          ),
+        ),
+        home: const HomePage()
       ),
-      home: const HomePage(),
     );
   }
 }

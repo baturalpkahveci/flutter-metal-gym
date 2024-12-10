@@ -1,7 +1,8 @@
 import 'dart:convert';
 import 'package:http/http.dart' as http;
 import 'package:flutter/material.dart';
-import '../models/product.dart';
+import 'package:metal_gym_mobile_application/models/product.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 
 class ProductProvider with ChangeNotifier {
   List<Product> _products = [];
@@ -12,9 +13,9 @@ class ProductProvider with ChangeNotifier {
   bool get isLoading => _isLoading;
 
   Future<void> fetchProducts({String? searchTerm}) async {
-    const String consumerKey = 'your_consumer_key';
-    const String consumerSecret = 'your_consumer_secret';
-    const String baseUrl = 'https://metalgymturkey.com/wp-json/wc/v3/products';
+    String consumerKey = dotenv.env['CLIENT_KEY'] ?? "Key not found!";
+    String consumerSecret = dotenv.env['CLIENT_SECRET'] ?? "Key not found!";
+    String baseUrl = dotenv.env['BASE_URL'] ?? "Base url not found!";
 
     String auth = base64Encode(utf8.encode('$consumerKey:$consumerSecret'));
 
@@ -22,6 +23,9 @@ class ProductProvider with ChangeNotifier {
     String url = baseUrl;
     if (searchTerm != null && searchTerm.isNotEmpty) {
       url += '?search=${Uri.encodeComponent(searchTerm)}';
+      print("SEARCH URL: $url");
+    }else{
+      url += "/products";
     }
 
     try {
@@ -38,16 +42,15 @@ class ProductProvider with ChangeNotifier {
 
       if (response.statusCode == 200) {
         final List<dynamic> jsonData = jsonDecode(response.body);
+        print("Fetched products: $jsonData"); // Debugging
         _products = jsonData.map((product) => Product.fromJson(product)).toList();
       } else {
         throw Exception('Failed to load products: ${response.statusCode}');
       }
     } catch (e) {
       print('Error fetching products: $e');
-    } finally {
-      _isLoading = false;
-      notifyListeners();
     }
+
   }
 
   Future<void> searchProducts(String query) async {
