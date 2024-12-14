@@ -2,6 +2,7 @@ import 'package:bottom_navy_bar/bottom_navy_bar.dart';
 import 'package:flutter/material.dart';
 import 'package:metal_gym_mobile_application/core/app_colors.dart';
 import 'package:metal_gym_mobile_application/pages/categories.dart';
+import 'package:metal_gym_mobile_application/pages/log_in.dart';
 import 'package:metal_gym_mobile_application/pages/profile.dart';
 import 'package:metal_gym_mobile_application/pages/shop.dart';
 import 'package:metal_gym_mobile_application/pages/shopping_cart.dart';
@@ -42,7 +43,8 @@ class _HomePageState extends State<HomePage> {
             CategoriesPage(),
             ShopPage(),
             ShoppingCart(),
-            ProfilePage()
+            ProfilePage(),
+            //LoginScreen()
           ],
         ),
       ),

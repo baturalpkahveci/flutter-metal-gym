@@ -8,7 +8,6 @@ import 'package:flutter_dotenv/flutter_dotenv.dart';
 Future<void> main() async{
   WidgetsFlutterBinding.ensureInitialized(); // Ensure Flutter bindings are initialized
   await dotenv.load(fileName: ".env"); // Load the .env file
-  print(dotenv.env); // Debug: Print loaded variables
   runApp(const MyApp());
 }
 
