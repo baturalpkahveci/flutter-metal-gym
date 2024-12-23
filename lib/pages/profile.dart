@@ -11,50 +11,68 @@ class ProfilePage extends StatelessWidget {
         appBar: AppBar(
           title: Text("Profil"),
         ),
-        drawer: Drawer(
+        body: Center(
           child: ListView(
+            addRepaintBoundaries: true,
             children: [
-              DrawerHeader(
-                  child: Center(
-                    child: Text("METALGYM"),
-                  ),
-                decoration: BoxDecoration(color: AppColors.primary),
-              ),
               ListTile(
                 leading: Icon(CupertinoIcons.device_phone_portrait),
                 title: Text("Pano"),
+                iconColor: AppColors.primary,
+                textColor: AppColors.secondary,
                 onTap: () {
 
                 },
-                selectedColor: AppColors.highlighted,
-                selected: true,
               ),
+
               ListTile(
                 leading: Icon(Icons.shopping_basket_outlined),
                 title: Text("Siparişler"),
+                iconColor: AppColors.primary,
+                textColor: AppColors.secondary,
+                onTap: () {
+
+                },
               ),
               ListTile(
                 leading: Icon(CupertinoIcons.arrow_down_doc),
                 title: Text("İndirmeler"),
+                iconColor: AppColors.primary,
+                textColor: AppColors.secondary,
+                onTap: () {
+
+                },
               ),
               ListTile(
                 leading: Icon(CupertinoIcons.home),
                 title: Text("Adresler"),
+                iconColor: AppColors.primary,
+                textColor: AppColors.secondary,
+                onTap: () {
+
+                },
               ),
               ListTile(
                 leading: Icon(CupertinoIcons.person),
                 title: Text("Hesap detayları"),
+                iconColor: AppColors.primary,
+                textColor: AppColors.secondary,
+                onTap: () {
+
+                },
               ),
               ListTile(
                 leading: Icon(Icons.logout),
                 title: Text("Oturumu kapat"),
+                iconColor: AppColors.highlighted,
+                textColor: AppColors.highlighted,
+                splashColor: AppColors.highlighted,
+                onTap: () {
+
+                },
               )
             ],
           ),
-          shape: Border.all(width: 0),
-          shadowColor: Colors.black,
-          elevation: 10,
-          backgroundColor: AppColors.secondary,
         ),
     );
   }

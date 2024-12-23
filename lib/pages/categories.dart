@@ -57,7 +57,7 @@ class CategoriesPage extends StatelessWidget {
                   height: 50
               ),
               decoration: const BoxDecoration(
-                  color: AppColors.secondary,
+                  color: AppColors.highlighted,
                   boxShadow: [
                     BoxShadow(
                         color: Colors.black,
@@ -75,11 +75,15 @@ class CategoriesPage extends StatelessWidget {
                       child: const Text(
                           "İndirimli Ürünler",
                           style: TextStyle(
-                            color: AppColors.highlighted,
+                            color: AppColors.background,
                             shadows: [
                               Shadow(
-                                color: AppColors.primary,
-                                blurRadius: 50
+                                color: AppColors.background,
+                                blurRadius: 5,
+                              ),
+                              Shadow(
+                                color: AppColors.background,
+                                blurRadius: 5,
                               )
                             ]
                           ),
