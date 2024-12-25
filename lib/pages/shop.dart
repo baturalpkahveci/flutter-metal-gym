@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:metal_gym_mobile_application/common/widgets/product_box.dart';
 import 'package:metal_gym_mobile_application/core/app_colors.dart';
 import 'package:url_launcher/url_launcher.dart';
-import 'package:metal_gym_mobile_application/services/product_provider.dart';
+import 'package:metal_gym_mobile_application/providers/product_provider.dart';
 import 'package:provider/provider.dart';
 
 class ShopPage extends StatefulWidget {
@@ -98,7 +98,7 @@ class _ShopPageState extends State<ShopPage> {
                   _searchQuery = value;
                 });
                 print("Submitted query: $_searchQuery");
-                productProvider.fetchProducts(searchTerm: _searchQuery);
+                ///productProvider.fetchProducts(searchTerm: _searchQuery); // TO DO
               },
             ),
             const SizedBox(height: 10),

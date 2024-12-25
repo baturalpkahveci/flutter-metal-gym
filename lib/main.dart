@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:metal_gym_mobile_application/core/app_colors.dart';
-import 'package:metal_gym_mobile_application/services/product_provider.dart';
+import 'package:metal_gym_mobile_application/providers/product_provider.dart';
 import 'package:provider/provider.dart';
 import 'pages/home.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
