@@ -1,62 +1,93 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_login/flutter_login.dart';
-import 'package:metal_gym_mobile_application/pages/profile.dart';
+import 'package:metal_gym_mobile_application/providers/user_provider.dart';
+import 'package:provider/provider.dart';
 
-const users =  {
-  'dribbble@gmail.com': '12345',
-  'hunter@gmail.com': 'hunter',
-};
+class LoginPage extends StatefulWidget {
+  @override
+  _LoginPageState createState() => _LoginPageState();
+}
 
-class LoginScreen extends StatelessWidget {
-  const LoginScreen({super.key});
+class _LoginPageState extends State<LoginPage> {
+  final _usernameController = TextEditingController();
+  final _passwordController = TextEditingController();
 
-  Duration get loginTime => const Duration(milliseconds: 2250);
+  bool _isLoading = false;
+  String? _errorMessage;
 
-  Future<String?> _authUser(LoginData data) {
-    debugPrint('Name: ${data.name}, Password: ${data.password}');
-    return Future.delayed(loginTime).then((_) {
-      if (!users.containsKey(data.name)) {
-        return 'User not exists';
-      }
-      if (users[data.name] != data.password) {
-        return 'Password does not match';
-      }
-      return null;
+  // Function to handle login
+  Future<void> _login() async {
+    final username = _usernameController.text;
+    final password = _passwordController.text;
+
+    if (username.isEmpty || password.isEmpty) {
+      setState(() {
+        _errorMessage = 'Please enter both username and password';
+      });
+      return;
+    }
+
+    setState(() {
+      _isLoading = true;
+      _errorMessage = null; // Clear previous error
     });
-  }
 
-  Future<String?> _signupUser(SignupData data) {
-    debugPrint('Signup Name: ${data.name}, Password: ${data.password}');
-    return Future.delayed(loginTime).then((_) {
-      return null;
-    });
-  }
-
-  Future<String> _recoverPassword(String name) {
-    debugPrint('Name: $name');
-    return Future.delayed(loginTime).then((_) {
-      if (!users.containsKey(name)) {
-        return 'User not exists';
-      }
-      return "null"; //TO DO: CHANGE LATER
-    });
+    try {
+      // Call the login function in UserProvider
+      await Provider.of<UserProvider>(context, listen: false).login(username, password);
+      // If login is successful, navigate to profile page or home page
+      Navigator.pop(context); // Close login page
+    } catch (error) {
+      setState(() {
+        _isLoading = false;
+        _errorMessage = 'Login failed: $error';
+      });
+    }
   }
 
   @override
   Widget build(BuildContext context) {
-    return FlutterLogin(
-      title: 'METALGYM',
-      logo: null,
-
-      onLogin: _authUser,
-      onSignup: _signupUser,
-      onSubmitAnimationCompleted: () {
-        //Navigator.of(context).pushReplacement(MaterialPageRoute(
-        //  builder: (context) => ProfilePage(),
-        //));
-        //TO DO: NAVIGATION TO THE PROFILE PAGE
-      },
-      onRecoverPassword: _recoverPassword,
+    return Scaffold(
+      appBar: AppBar(
+        title: Text('Login'),
+      ),
+      body: Padding(
+        padding: const EdgeInsets.all(16.0),
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            TextField(
+              controller: _usernameController,
+              decoration: InputDecoration(
+                labelText: 'Username',
+                errorText: _errorMessage != null ? 'Username is required' : null,
+              ),
+            ),
+            SizedBox(height: 10),
+            TextField(
+              controller: _passwordController,
+              obscureText: true,
+              decoration: InputDecoration(
+                labelText: 'Password',
+                errorText: _errorMessage != null ? 'Password is required' : null,
+              ),
+            ),
+            SizedBox(height: 20),
+            if (_isLoading)
+              CircularProgressIndicator()
+            else
+              ElevatedButton(
+                onPressed: _login,
+                child: Text('Login'),
+              ),
+            SizedBox(height: 10),
+            if (_errorMessage != null)
+              Text(
+                _errorMessage!,
+                style: TextStyle(color: Colors.red),
+              ),
+          ],
+        ),
+      ),
     );
   }
 }

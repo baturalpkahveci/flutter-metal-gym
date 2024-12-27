@@ -1,12 +1,18 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:metal_gym_mobile_application/core/app_colors.dart';
+import 'package:provider/provider.dart';
+import 'package:metal_gym_mobile_application/providers/user_provider.dart';
 
 class ProfilePage extends StatelessWidget {
   const ProfilePage({super.key});
 
   @override
   Widget build(BuildContext context) {
+    final currentUser = Provider.of<UserProvider>(context).currentUser;
+    //TO DO: Find out how to log in with wc rest api and save the current user to flutter
+    //Research about JWT Tokens and login with wc rest api
+
     return Scaffold(
         appBar: AppBar(
           title: Text("Profil"),
