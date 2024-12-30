@@ -83,6 +83,10 @@ class MyApp extends StatelessWidget {
                 )],
               ),
             ),
+          progressIndicatorTheme: ProgressIndicatorThemeData(
+            color: AppColors.highlighted,
+            circularTrackColor: AppColors.secondary
+          )
         ),
         home: const HomePage()
       ),

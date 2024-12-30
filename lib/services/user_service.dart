@@ -3,7 +3,7 @@ import 'package:http/http.dart' as http;
 import 'package:metal_gym_mobile_application/models/user.dart';
 
 class UserService {
-  final String baseUrl = 'https://your-backend-api-url.com'; // Replace with your server URL
+  final String baseUrl = 'https://mgbackend-czhf.onrender.com'; // Replace with your server URL
 
   // Fetch user by ID
   Future<User> fetchUserById(int userId) async {

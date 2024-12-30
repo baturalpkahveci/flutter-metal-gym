@@ -45,7 +45,6 @@ class _HomePageState extends State<HomePage> {
             ShopPage(),
             ShoppingCart(),
             ProfilePage(),
-            ProductDetailsPage(),
             //LoginScreen()
           ],
         ),

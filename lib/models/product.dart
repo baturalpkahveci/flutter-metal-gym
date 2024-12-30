@@ -60,15 +60,16 @@ class Product {
           ? json['categories'][0]['name']
           : 'Uncategorized',
       imageUrl: (json['images'] != null && json['images'].isNotEmpty)
-          ? json['images'][0]['src']
+          ? "${json['images'][0]['src']}?width=300&height=300"
           : '',
       gallery: json['images'] != null
           ? json['images']
-          .map<String>((image) => image['src'].toString())
+          .map<String>((image) => "${image['src']}?width=300&height=300")
           .toList()
           : [],
       totalSales: json['total_sales'] ?? 0,
-      averageRating: double.tryParse(json['average_rating']?.toString() ?? '0.0') ?? 0.0,
+      averageRating: double.tryParse(
+          json['average_rating']?.toString() ?? '0.0') ?? 0.0,
       ratingCount: json['rating_count'] ?? 0,
       isFeatured: json['featured'] ?? false,
       tags: json['tags'] != null

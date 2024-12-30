@@ -3,7 +3,7 @@ import 'package:http/http.dart' as http;
 import 'package:metal_gym_mobile_application/models/product.dart';
 
 class ProductService {
-  final String baseUrl = 'https://your-backend-api-url.com'; // Replace with your server URL
+  final String baseUrl = 'https://mgbackend-czhf.onrender.com'; // Replace with your server URL
 
   // Fetch products from the API
   Future<List<Product>> fetchProducts() async {

@@ -139,6 +139,7 @@ class _ShopPageState extends State<ShopPage> {
                         crossAxisSpacing: 8.0,
                         mainAxisSpacing: 8.0,
                       ),
+                      itemCount: productProvider.products.length,
                       itemBuilder: (context, index) {
                         final product = productProvider.products[index];
                         return ProductBox(product: product);

@@ -3,7 +3,7 @@ import 'package:http/http.dart' as http;
 import 'package:metal_gym_mobile_application/models/order.dart'; // Import your order model
 
 class OrderService {
-  final String apiUrl = 'https://your-backend-url.com'; // Replace with your backend URL
+  final String apiUrl = 'https://mgbackend-czhf.onrender.com'; // Replace with your backend URL
 
   // Fetch all orders for a specific customer
   Future<List<Order>> fetchAllOrdersForCustomer(int customerId) async {

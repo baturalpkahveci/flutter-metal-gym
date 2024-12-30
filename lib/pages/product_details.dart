@@ -1,10 +1,12 @@
+import 'package:custom_rating_bar/custom_rating_bar.dart';
 import 'package:flutter/material.dart';
 import 'package:metal_gym_mobile_application/core/app_colors.dart';
 import 'package:metal_gym_mobile_application/common/widgets/product_comment_box.dart';
-import 'package:metal_gym_mobile_application/pages/shop.dart';
+import 'package:metal_gym_mobile_application/models/product.dart';
 
 class ProductDetailsPage extends StatefulWidget {
-  const ProductDetailsPage({super.key});
+  const ProductDetailsPage({super.key, required this.product});
+  final Product product;
 
   @override
   State<ProductDetailsPage> createState() => _ProductDetailsPageState();
@@ -61,7 +63,9 @@ class _ProductDetailsPageState extends State<ProductDetailsPage>  {
                 SizedBox(height: screenHeight * 0.05,),
                 Column(
                   children: [
+
                     _productCommentsHeader(screenHeight, screenWidth),
+                    _ratingInputField(screenHeight, screenWidth),
                     _productCommentsInputField(screenHeight, screenWidth),
                     _productCommentsList(screenWidth, screenHeight),
                   ],
@@ -147,12 +151,51 @@ class _ProductDetailsPageState extends State<ProductDetailsPage>  {
     );
   }
 
+  Container _ratingInputField(double screenHeight, double screenWidth) {
+    return Container(
+      height: screenHeight * 0.07,
+      width: double.maxFinite,
+      decoration: BoxDecoration(
+        color: AppColors.background,
+        boxShadow: [
+          BoxShadow(
+            color: Colors.black.withOpacity(0.1),
+            blurRadius: 20,
+            spreadRadius: screenWidth * 0.025,
+          ),
+        ],
+      ),
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceAround,
+        children: [
+          Text(
+            "Derecelendirmeniz:",
+            style: TextStyle(
+              color: AppColors.primary.withOpacity(0.5),
+              fontSize: screenHeight * 0.018,
+              fontWeight: FontWeight.w500,
+            ),
+          ),
+          RatingBar(
+            filledIcon: Icons.star,
+            emptyIcon: Icons.star_border,
+            onRatingChanged: (value) {
+              print("Rating changed to $value");
+            },
+            isHalfAllowed: false,
+            filledColor: AppColors.highlighted,
+          ),
+        ],
+      )
+    );
+  }
+
   Container _productCommentsHeader(double screenHeight, double screenWidth) {
     return Container(
       height: screenHeight * 0.07,
       width: double.maxFinite,
       decoration: BoxDecoration(
-        color: AppColors.highlighted,
+        color: AppColors.primary,
         borderRadius: BorderRadius.vertical(
           top: Radius.circular(screenWidth * 0.05),
         ),
@@ -182,7 +225,7 @@ class _ProductDetailsPageState extends State<ProductDetailsPage>  {
       height: screenHeight * 0.07,
       width: double.maxFinite,
       decoration: BoxDecoration(
-        color: AppColors.highlighted,
+        color: AppColors.primary,
         borderRadius: BorderRadius.vertical(
           top: Radius.circular(screenWidth * 0.05),
         ),
@@ -232,7 +275,7 @@ class _ProductDetailsPageState extends State<ProductDetailsPage>  {
             Container(
               width: screenWidth * 0.8,
               child: Text(
-                exampleInfo,
+                widget.product.description  == '' ? "Ürün açıklaması bulunmamaktadır." : widget.product.description,
                 style: TextStyle(
                   color: AppColors.primary,
                   fontSize: screenHeight * 0.018,
@@ -299,7 +342,7 @@ class _ProductDetailsPageState extends State<ProductDetailsPage>  {
               },
               child: CircleAvatar(
                 radius: screenWidth * 0.05,
-                backgroundColor: AppColors.secondary,
+                backgroundColor: AppColors.primary,
                 child: Icon(
                   Icons.remove,
                   color: AppColors.background,
@@ -331,7 +374,7 @@ class _ProductDetailsPageState extends State<ProductDetailsPage>  {
               },
               child: CircleAvatar(
                 radius: screenWidth * 0.05,
-                backgroundColor: AppColors.secondary,
+                backgroundColor: AppColors.primary,
                 child: Icon(
                   Icons.add,
                   color: AppColors.background,
@@ -347,7 +390,7 @@ class _ProductDetailsPageState extends State<ProductDetailsPage>  {
 
   Text _productPrice(double screenWidth, double screenHeight) {
     return Text(
-      '000000.00 TL',
+      '${widget.product.price} TL',
       style: TextStyle(
         color: AppColors.priceColor,
         fontSize: screenWidth * 0.05
@@ -362,7 +405,7 @@ class _ProductDetailsPageState extends State<ProductDetailsPage>  {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Text(
-            'Ürün Adı',
+            widget.product.name,
             style: TextStyle(
               color: AppColors.primary,
               fontSize: screenWidth * 0.055,

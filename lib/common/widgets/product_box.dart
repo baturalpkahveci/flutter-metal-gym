@@ -1,3 +1,4 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:metal_gym_mobile_application/core/app_colors.dart';
 import 'package:metal_gym_mobile_application/models/product.dart';
@@ -15,7 +16,7 @@ class ProductBox extends StatelessWidget {
         print('Product tapped!');
         Navigator.push(
           context,
-          MaterialPageRoute(builder: (context) => ProductDetailsPage(),)
+          MaterialPageRoute(builder: (context) => ProductDetailsPage(product: product,),)
         );
       },
       child: Column(
@@ -24,7 +25,20 @@ class ProductBox extends StatelessWidget {
             borderRadius: BorderRadius.all(Radius.circular(15.0)),
             child: Container(
               constraints: BoxConstraints(maxHeight: 200),
-              child: Expanded(child: Image.network(product.imageUrl)),
+              child: Image.network(
+                "${product.imageUrl}?width=100&height=100",
+                loadingBuilder: (context, child, loadingProgress) {
+                  if (loadingProgress == null) return child;
+                  return Center(
+                    child: CircularProgressIndicator(
+                      value: loadingProgress.expectedTotalBytes != null
+                          ? loadingProgress.cumulativeBytesLoaded /
+                          (loadingProgress.expectedTotalBytes ?? 1)
+                          : null,
+                    ),
+                  );
+                },
+              )
             ),
           ),
           SizedBox(height: 4),
