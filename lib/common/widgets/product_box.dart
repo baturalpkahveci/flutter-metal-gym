@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:metal_gym_mobile_application/core/app_colors.dart';
 import 'package:metal_gym_mobile_application/models/product.dart';
+import 'package:metal_gym_mobile_application/pages/product_details.dart';
 
 class ProductBox extends StatelessWidget {
   const ProductBox({super.key, required this.product});
@@ -8,52 +9,62 @@ class ProductBox extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Column(
-      children: [
-        ClipRRect(
-          borderRadius: BorderRadius.all(Radius.circular(15.0)),
-          child: Container(
-            constraints: BoxConstraints(maxHeight: 200),
-            child: Expanded(child: Image.network(product.imageUrl)),
+    return GestureDetector(
+      onTap: () {
+        // Handle tap event here.
+        print('Product tapped!');
+        Navigator.push(
+          context,
+          MaterialPageRoute(builder: (context) => ProductDetailsPage(),)
+        );
+      },
+      child: Column(
+        children: [
+          ClipRRect(
+            borderRadius: BorderRadius.all(Radius.circular(15.0)),
+            child: Container(
+              constraints: BoxConstraints(maxHeight: 200),
+              child: Expanded(child: Image.network(product.imageUrl)),
+            ),
           ),
-        ),
-        SizedBox(height: 4),
-        Text(
-            product.name,
-            style: TextStyle(
-              shadows: [
-                Shadow(
-                  color: Colors.black,
-                  blurRadius: 80
-                )
-              ]
-            ),
-        ),
-        Row(
-          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-          children: [
-            Text(
-              "${product.price} TL",
+          SizedBox(height: 4),
+          Text(
+              product.name,
               style: TextStyle(
-                  color: AppColors.priceColor,
+                shadows: [
+                  Shadow(
+                    color: Colors.black,
+                    blurRadius: 80
+                  )
+                ]
               ),
-            ),
-            IconButton(
-                style: ButtonStyle(
-                  backgroundColor: WidgetStatePropertyAll(AppColors.primary),
-                  iconSize: WidgetStatePropertyAll(15),
+          ),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+            children: [
+              Text(
+                "${product.price} TL",
+                style: TextStyle(
+                    color: AppColors.priceColor,
                 ),
-                constraints: BoxConstraints(maxHeight: 30,maxWidth: 30),
-                onPressed: null,
-                icon: Icon(
-                  Icons.add,
-                  color: AppColors.background,
-                )
-            )
-          ],
-        ),
-
-      ],
+              ),
+              IconButton(
+                  style: ButtonStyle(
+                    backgroundColor: WidgetStatePropertyAll(AppColors.primary),
+                    iconSize: WidgetStatePropertyAll(15),
+                  ),
+                  constraints: BoxConstraints(maxHeight: 30,maxWidth: 30),
+                  onPressed: null,
+                  icon: Icon(
+                    Icons.add,
+                    color: AppColors.background,
+                  )
+              )
+            ],
+          ),
+      
+        ],
+      ),
     );
   }
 }
