@@ -10,6 +10,7 @@ class ProductBox extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+
     return GestureDetector(
       onTap: () {
         // Handle tap event here.
