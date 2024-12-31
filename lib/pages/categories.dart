@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:metal_gym_mobile_application/common/widgets/category_box.dart';
-
-import '../core/app_colors.dart';
+import 'package:metal_gym_mobile_application/core/app_colors.dart';
 
 class CategoriesPage extends StatelessWidget {
   const CategoriesPage({super.key});
