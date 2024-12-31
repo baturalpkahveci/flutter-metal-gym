@@ -1,4 +1,3 @@
-import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:metal_gym_mobile_application/core/app_colors.dart';
 import 'package:metal_gym_mobile_application/models/product.dart';
