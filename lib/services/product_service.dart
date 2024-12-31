@@ -8,6 +8,7 @@ class ProductService {
   // Fetch products from the API
   Future<List<Product>> fetchProducts() async {
     final response = await http.get(Uri.parse('$baseUrl/products'));
+    print("FetchProducts response length: ${response.contentLength}");
 
     if (response.statusCode == 200) {
       List<dynamic> data = jsonDecode(response.body);

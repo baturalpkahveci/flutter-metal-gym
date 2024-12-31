@@ -1,5 +1,6 @@
 import 'package:custom_rating_bar/custom_rating_bar.dart';
 import 'package:flutter/material.dart';
+import 'package:metal_gym_mobile_application/common/widgets/image_panel.dart';
 import 'package:metal_gym_mobile_application/core/app_colors.dart';
 import 'package:metal_gym_mobile_application/common/widgets/product_comment_box.dart';
 import 'package:metal_gym_mobile_application/models/product.dart';
@@ -472,7 +473,13 @@ class _ProductDetailsPageState extends State<ProductDetailsPage>  {
     return Container(
       width: screenWidth,
       height: screenHeight * 0.5,
-      color: AppColors.highlighted,
+      color: AppColors.secondary,
+      child: ImagePanel(
+        imageUrls: widget.product.gallery,
+        dotColor: AppColors.primary,
+        activeDotColor: AppColors.highlighted,
+        height: screenHeight * 0.5,
+      ),
     );
   }
 }

@@ -14,15 +14,24 @@ class ProductProvider with ChangeNotifier {
   // Fetch products from the API
   Future<void> fetchProducts() async {
     _isLoading = true;
-    notifyListeners();
+    _error = ''; // Reset previous error
+    notifyListeners();  // Notify listeners before starting the request
 
     try {
+      // Fetch products from API
       _products = await ProductService().fetchProducts();
-    } catch (e) {
-      _error = e.toString();
-    }
 
-    _isLoading = false;
-    notifyListeners();
+      // Handle the successful product fetch
+      _error = ''; // Clear any previous error if the fetch was successful
+    } catch (e) {
+      // Handle error case
+      _error = e.toString();
+      _products = []; // Clear products in case of error
+    } finally {
+      // Ensure _isLoading is set to false when fetching is done (success or failure)
+      _isLoading = false;
+      print("Fetched product count: ${_products.length}");
+      notifyListeners();  // Notify listeners once data is fetched or error occurred
+    }
   }
 }

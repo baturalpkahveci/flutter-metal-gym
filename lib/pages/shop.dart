@@ -20,11 +20,12 @@ class _ShopPageState extends State<ShopPage> {
   String _searchQuery = '';
 
   @override
-  void initState() {
-    super.initState();
-    // Access the ProductProvider and fetch products
+  void didChangeDependencies() {
+    super.didChangeDependencies();
     final productProvider = Provider.of<ProductProvider>(context, listen: false);
-    productProvider.fetchProducts();
+    if (productProvider.products.isEmpty) {
+      productProvider.fetchProducts();
+    }
   }
 
   @override
