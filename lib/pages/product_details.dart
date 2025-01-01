@@ -19,6 +19,9 @@ class _ProductDetailsPageState extends State<ProductDetailsPage>  {
   final String exampleComment =
       'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.';
 
+  int productAmount = 1;
+
+
   @override
   Widget build(BuildContext context)  {
     final double screenWidth = MediaQuery.of(context).size.width;
@@ -34,7 +37,6 @@ class _ProductDetailsPageState extends State<ProductDetailsPage>  {
               _addToFavoritesButton(screenWidth, screenHeight),
             ],
           ),
-          SizedBox(height: screenHeight * 0.01,),
           Padding(
             padding: EdgeInsets.all(screenWidth * 0.05),
             child: Column(
@@ -64,9 +66,14 @@ class _ProductDetailsPageState extends State<ProductDetailsPage>  {
                 SizedBox(height: screenHeight * 0.05,),
                 Column(
                   children: [
-
+                    _productTagsHeader(screenWidth, screenHeight),
+                    _productTags(screenWidth, screenHeight),
+                  ],
+                ),
+                SizedBox(height: screenHeight * 0.05,),
+                Column(
+                  children: [
                     _productCommentsHeader(screenHeight, screenWidth),
-                    _ratingInputField(screenHeight, screenWidth),
                     _productCommentsInputField(screenHeight, screenWidth),
                     _productCommentsList(screenWidth, screenHeight),
                   ],
@@ -112,51 +119,6 @@ class _ProductDetailsPageState extends State<ProductDetailsPage>  {
   Container _productCommentsInputField(double screenHeight, double screenWidth) {
     return Container(
       decoration: BoxDecoration(
-        boxShadow: [
-          BoxShadow(
-            color: Colors.black.withOpacity(0.1),
-            blurRadius: 20,
-            spreadRadius: screenWidth * 0.025,
-          ),
-        ],
-      ),
-      child: TextField(
-        maxLines: 5,
-        minLines: 1,
-        decoration: InputDecoration(
-          filled: true,
-          fillColor: AppColors.background,
-          contentPadding: EdgeInsets.symmetric(vertical: screenHeight * 0.02, horizontal: screenWidth * 0.05),
-          hintText: 'Yorum yap...',
-          hintStyle: TextStyle(
-            color: AppColors.primary.withOpacity(0.5),
-            fontSize: screenHeight * 0.018,
-            fontWeight: FontWeight.w500,
-          ),
-          border: OutlineInputBorder(
-            borderRadius: BorderRadius.vertical(bottom: Radius.zero),
-            borderSide: BorderSide.none,
-          ),
-          suffixIcon: Icon(
-            Icons.arrow_circle_right_outlined,
-            color: AppColors.primary.withOpacity(0.5),
-            size: screenWidth * 0.08,
-          ),
-        ),
-        style: TextStyle(
-          color: AppColors.primary,
-          fontSize: screenHeight * 0.018,
-          fontWeight: FontWeight.w500,
-        ),
-      ),
-    );
-  }
-
-  Container _ratingInputField(double screenHeight, double screenWidth) {
-    return Container(
-      height: screenHeight * 0.07,
-      width: double.maxFinite,
-      decoration: BoxDecoration(
         color: AppColors.background,
         boxShadow: [
           BoxShadow(
@@ -166,30 +128,69 @@ class _ProductDetailsPageState extends State<ProductDetailsPage>  {
           ),
         ],
       ),
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceAround,
+      child: Column(
         children: [
-          Text(
-            "Derecelendirmeniz:",
+          SizedBox(height: screenHeight * 0.02,),
+          Padding(
+            padding: EdgeInsets.symmetric(horizontal: screenWidth * 0.05),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Text(
+                  "Derecelendirmeniz:",
+                  style: TextStyle(
+                    color: AppColors.primary.withOpacity(0.5),
+                    fontSize: screenHeight * 0.018,
+                    fontWeight: FontWeight.w500,
+                  ),
+                ),
+                RatingBar(
+                  filledIcon: Icons.star,
+                  emptyIcon: Icons.star_border,
+                  onRatingChanged: (value) {
+                    print("Rating changed to $value");
+                  },
+                  isHalfAllowed: false,
+                  filledColor: AppColors.highlighted,
+                ),
+              ],
+            ),
+          ),
+          SizedBox(height: screenHeight * 0.01,),
+          TextField(
+            maxLines: 5,
+            minLines: 1,
+            decoration: InputDecoration(
+              filled: true,
+              fillColor: AppColors.background,
+              contentPadding: EdgeInsets.symmetric(vertical: screenHeight * 0.02, horizontal: screenWidth * 0.05),
+              hintText: 'Yorum yap...',
+              hintStyle: TextStyle(
+                color: AppColors.primary.withOpacity(0.5),
+                fontSize: screenHeight * 0.018,
+                fontWeight: FontWeight.w500,
+              ),
+              border: OutlineInputBorder(
+                borderRadius: BorderRadius.vertical(bottom: Radius.zero),
+                borderSide: BorderSide.none,
+              ),
+              suffixIcon: Icon(
+                Icons.arrow_circle_right_outlined,
+                color: AppColors.primary.withOpacity(0.5),
+                size: screenWidth * 0.08,
+              ),
+            ),
             style: TextStyle(
-              color: AppColors.primary.withOpacity(0.5),
+              color: AppColors.primary,
               fontSize: screenHeight * 0.018,
               fontWeight: FontWeight.w500,
             ),
-          ),
-          RatingBar(
-            filledIcon: Icons.star,
-            emptyIcon: Icons.star_border,
-            onRatingChanged: (value) {
-              print("Rating changed to $value");
-            },
-            isHalfAllowed: false,
-            filledColor: AppColors.highlighted,
           ),
         ],
       )
     );
   }
+
 
   Container _productCommentsHeader(double screenHeight, double screenWidth) {
     return Container(
@@ -208,7 +209,7 @@ class _ProductDetailsPageState extends State<ProductDetailsPage>  {
           mainAxisAlignment: MainAxisAlignment.start,
           children: [
             Text(
-              'Ürün Yorumları',
+              'Ürün Yorumları ve Puanları',
               style: TextStyle(
                 color: AppColors.background,
                 fontSize: screenHeight * 0.021,
@@ -220,7 +221,6 @@ class _ProductDetailsPageState extends State<ProductDetailsPage>  {
       ),
     );
   }
-
   Container _productInfoHeader(double screenWidth, double screenHeight) {
     return Container(
       height: screenHeight * 0.07,
@@ -239,6 +239,76 @@ class _ProductDetailsPageState extends State<ProductDetailsPage>  {
           children: [
             Text(
               'Ürün Açıklaması',
+              style: TextStyle(
+                color: AppColors.background,
+                fontSize: screenHeight * 0.021,
+                fontWeight: FontWeight.bold,
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+
+  Container _productTags(double screenWidth, double screenHeight) {
+    return Container(
+      width: double.maxFinite,
+      decoration: BoxDecoration(
+        color: AppColors.background,
+        borderRadius: BorderRadius.vertical(
+          bottom: Radius.circular(screenWidth * 0.05),
+        ),
+        boxShadow: [
+          BoxShadow(
+            color: Colors.black.withOpacity(0.1),
+            blurRadius: 20,
+            spreadRadius: screenWidth * 0.025,
+          ),
+        ],
+      ),
+      child: Padding(
+        padding: EdgeInsets.symmetric(horizontal: screenWidth * 0.05, vertical: screenHeight * 0.02),
+        child: Row(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          mainAxisAlignment: MainAxisAlignment.start,
+          children: [
+            Container(
+              width: screenWidth * 0.8,
+              child: Text(
+                // Add product tags here.
+                '#urunetiketleri',
+                style: TextStyle(
+                  color: AppColors.primary,
+                  fontSize: screenHeight * 0.018,
+                ),
+                softWrap: true,
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+
+  Container _productTagsHeader(double screenWidth, double screenHeight) {
+    return Container(
+      height: screenHeight * 0.07,
+      width: double.maxFinite,
+      decoration: BoxDecoration(
+        color: AppColors.primary,
+        borderRadius: BorderRadius.vertical(
+          top: Radius.circular(screenWidth * 0.05),
+        ),
+      ),
+      child: Padding(
+        padding: EdgeInsets.only(left: screenWidth * 0.05),
+        child: Row(
+          crossAxisAlignment: CrossAxisAlignment.center,
+          mainAxisAlignment: MainAxisAlignment.start,
+          children: [
+            Text(
+              'Ürün Etiketleri',
               style: TextStyle(
                 color: AppColors.background,
                 fontSize: screenHeight * 0.021,
@@ -276,7 +346,7 @@ class _ProductDetailsPageState extends State<ProductDetailsPage>  {
             Container(
               width: screenWidth * 0.8,
               child: Text(
-                widget.product.description  == '' ? "Ürün açıklaması bulunmamaktadır." : widget.product.description,
+                (widget.product.description)  == '' ? "Ürün açıklaması bulunmamaktadır." : widget.product.description.substring(3, (widget.product.description).length - 5),
                 style: TextStyle(
                   color: AppColors.primary,
                   fontSize: screenHeight * 0.018,
@@ -294,6 +364,33 @@ class _ProductDetailsPageState extends State<ProductDetailsPage>  {
     return GestureDetector(
       onTap: () {
         // Handle tap event here.
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: Text(
+              '$productAmount adet ${widget.product.name} sepetinize eklendi',
+              style: TextStyle(
+                color: AppColors.primary,
+                fontSize: screenWidth * 0.04,
+              ),
+            ),
+            duration: Duration(seconds: 2),
+            backgroundColor: Color(0xffFBFBFB),
+            elevation: 10,
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.vertical(
+                top: Radius.circular(screenWidth * 0.05),
+              )
+            ),
+            action: SnackBarAction(
+              textColor: AppColors.highlighted,
+              label: 'Geri Al',
+              onPressed: () {
+                // Handle the "UNDO" action
+                print('Undo action performed');
+              },
+            ),
+          ),
+        );
         print('Added to shopping list successfully!');
       },
       child: Container(
@@ -339,6 +436,9 @@ class _ProductDetailsPageState extends State<ProductDetailsPage>  {
             GestureDetector(
               onTap: () {
                 // Handle tap event here.
+                setState(() {
+                  if (productAmount > 0) productAmount--;
+                });
                 print('Product amount decremented.');
               },
               child: CircleAvatar(
@@ -355,15 +455,17 @@ class _ProductDetailsPageState extends State<ProductDetailsPage>  {
             Container(
               height: screenHeight * 0.05,
               width: screenWidth * 0.2,
-              child: TextField(
+              alignment: Alignment.center,
+              decoration: BoxDecoration(
+                color: Colors.black.withOpacity(0.1),
+                borderRadius: BorderRadius.circular(5),
+              ),
+              child: Text(
+                productAmount.toString(),
+                textAlign: TextAlign.center,
                 style: TextStyle(
                   color: AppColors.primary,
                   fontSize: screenWidth * 0.05,
-                ),
-                decoration: InputDecoration(
-                  filled: true,
-                  fillColor: Colors.black.withOpacity(0.1),
-                  border: InputBorder.none,
                 ),
               ),
             ),
@@ -371,6 +473,9 @@ class _ProductDetailsPageState extends State<ProductDetailsPage>  {
             GestureDetector(
               onTap: () {
                 // Handle tap event here.
+                setState(() {
+                  productAmount++;
+                });
                 print('Product amount incremented.');
               },
               child: CircleAvatar(
@@ -394,7 +499,7 @@ class _ProductDetailsPageState extends State<ProductDetailsPage>  {
       '${widget.product.price} TL',
       style: TextStyle(
         color: AppColors.priceColor,
-        fontSize: screenWidth * 0.05
+        fontSize: screenWidth * 0.045,
       ),
     );
   }
@@ -409,7 +514,7 @@ class _ProductDetailsPageState extends State<ProductDetailsPage>  {
             widget.product.name,
             style: TextStyle(
               color: AppColors.primary,
-              fontSize: screenWidth * 0.055,
+              fontSize: screenWidth * 0.05,
               fontWeight: FontWeight.bold,
             ),
             softWrap: true,
@@ -425,10 +530,37 @@ class _ProductDetailsPageState extends State<ProductDetailsPage>  {
       right: 0,
       child: GestureDetector(
         onTap: () {
+          ScaffoldMessenger.of(context).showSnackBar(
+            SnackBar(
+              content: Text(
+                '${widget.product.name} favorilerinize eklendi',
+                style: TextStyle(
+                  color: AppColors.primary,
+                  fontSize: screenWidth * 0.04,
+                ),
+              ),
+              duration: Duration(seconds: 2),
+              backgroundColor: Color(0xffFBFBFB),
+              elevation: 10,
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.vertical(
+                  top: Radius.circular(screenWidth * 0.05),
+                ),
+              ),
+              action: SnackBarAction(
+                textColor: AppColors.highlighted,
+                label: 'Geri Al',
+                onPressed: () {
+                  // Handle the "UNDO" action
+                  print('Undo action performed');
+                },
+              ),
+            ),
+          );
           print('Add to favorites button tapped.');
         },
         child: Container(
-          width: 170,
+          width: screenWidth * 0.4,
           height: screenHeight * 0.07,
           decoration: BoxDecoration(
             color: AppColors.background,
@@ -449,7 +581,7 @@ class _ProductDetailsPageState extends State<ProductDetailsPage>  {
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
                 Icon(
-                  Icons.add,
+                  Icons.add_circle_rounded,
                   color: AppColors.secondary,
                   size: screenWidth * 0.06,
                 ),
@@ -472,8 +604,8 @@ class _ProductDetailsPageState extends State<ProductDetailsPage>  {
   Container _productImage(double screenWidth, double screenHeight) {
     return Container(
       width: screenWidth,
-      height: screenHeight * 0.5,
-      color: AppColors.secondary,
+      height: screenHeight * 0.55,
+      color: AppColors.background,
       child: ImagePanel(
         imageUrls: widget.product.gallery,
         dotColor: AppColors.primary,
