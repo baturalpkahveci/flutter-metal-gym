@@ -21,6 +21,7 @@ class _ProductDetailsPageState extends State<ProductDetailsPage>  {
 
   int productAmount = 1;
 
+
   @override
   Widget build(BuildContext context)  {
     final double screenWidth = MediaQuery.of(context).size.width;
@@ -72,9 +73,7 @@ class _ProductDetailsPageState extends State<ProductDetailsPage>  {
                 SizedBox(height: screenHeight * 0.05,),
                 Column(
                   children: [
-
                     _productCommentsHeader(screenHeight, screenWidth),
-                    _ratingInputField(screenHeight, screenWidth),
                     _productCommentsInputField(screenHeight, screenWidth),
                     _productCommentsList(screenWidth, screenHeight),
                   ],
@@ -120,51 +119,6 @@ class _ProductDetailsPageState extends State<ProductDetailsPage>  {
   Container _productCommentsInputField(double screenHeight, double screenWidth) {
     return Container(
       decoration: BoxDecoration(
-        boxShadow: [
-          BoxShadow(
-            color: Colors.black.withOpacity(0.1),
-            blurRadius: 20,
-            spreadRadius: screenWidth * 0.025,
-          ),
-        ],
-      ),
-      child: TextField(
-        maxLines: 5,
-        minLines: 1,
-        decoration: InputDecoration(
-          filled: true,
-          fillColor: AppColors.background,
-          contentPadding: EdgeInsets.symmetric(vertical: screenHeight * 0.02, horizontal: screenWidth * 0.05),
-          hintText: 'Yorum yap...',
-          hintStyle: TextStyle(
-            color: AppColors.primary.withOpacity(0.5),
-            fontSize: screenHeight * 0.018,
-            fontWeight: FontWeight.w500,
-          ),
-          border: OutlineInputBorder(
-            borderRadius: BorderRadius.vertical(bottom: Radius.zero),
-            borderSide: BorderSide.none,
-          ),
-          suffixIcon: Icon(
-            Icons.arrow_circle_right_outlined,
-            color: AppColors.primary.withOpacity(0.5),
-            size: screenWidth * 0.08,
-          ),
-        ),
-        style: TextStyle(
-          color: AppColors.primary,
-          fontSize: screenHeight * 0.018,
-          fontWeight: FontWeight.w500,
-        ),
-      ),
-    );
-  }
-
-  Container _ratingInputField(double screenHeight, double screenWidth) {
-    return Container(
-      height: screenHeight * 0.07,
-      width: double.maxFinite,
-      decoration: BoxDecoration(
         color: AppColors.background,
         boxShadow: [
           BoxShadow(
@@ -174,30 +128,69 @@ class _ProductDetailsPageState extends State<ProductDetailsPage>  {
           ),
         ],
       ),
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceAround,
+      child: Column(
         children: [
-          Text(
-            "Derecelendirmeniz:",
+          SizedBox(height: screenHeight * 0.02,),
+          Padding(
+            padding: EdgeInsets.symmetric(horizontal: screenWidth * 0.05),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Text(
+                  "Derecelendirmeniz:",
+                  style: TextStyle(
+                    color: AppColors.primary.withOpacity(0.5),
+                    fontSize: screenHeight * 0.018,
+                    fontWeight: FontWeight.w500,
+                  ),
+                ),
+                RatingBar(
+                  filledIcon: Icons.star,
+                  emptyIcon: Icons.star_border,
+                  onRatingChanged: (value) {
+                    print("Rating changed to $value");
+                  },
+                  isHalfAllowed: false,
+                  filledColor: AppColors.highlighted,
+                ),
+              ],
+            ),
+          ),
+          SizedBox(height: screenHeight * 0.01,),
+          TextField(
+            maxLines: 5,
+            minLines: 1,
+            decoration: InputDecoration(
+              filled: true,
+              fillColor: AppColors.background,
+              contentPadding: EdgeInsets.symmetric(vertical: screenHeight * 0.02, horizontal: screenWidth * 0.05),
+              hintText: 'Yorum yap...',
+              hintStyle: TextStyle(
+                color: AppColors.primary.withOpacity(0.5),
+                fontSize: screenHeight * 0.018,
+                fontWeight: FontWeight.w500,
+              ),
+              border: OutlineInputBorder(
+                borderRadius: BorderRadius.vertical(bottom: Radius.zero),
+                borderSide: BorderSide.none,
+              ),
+              suffixIcon: Icon(
+                Icons.arrow_circle_right_outlined,
+                color: AppColors.primary.withOpacity(0.5),
+                size: screenWidth * 0.08,
+              ),
+            ),
             style: TextStyle(
-              color: AppColors.primary.withOpacity(0.5),
+              color: AppColors.primary,
               fontSize: screenHeight * 0.018,
               fontWeight: FontWeight.w500,
             ),
-          ),
-          RatingBar(
-            filledIcon: Icons.star,
-            emptyIcon: Icons.star_border,
-            onRatingChanged: (value) {
-              print("Rating changed to $value");
-            },
-            isHalfAllowed: false,
-            filledColor: AppColors.highlighted,
           ),
         ],
       )
     );
   }
+
 
   Container _productCommentsHeader(double screenHeight, double screenWidth) {
     return Container(
@@ -216,7 +209,7 @@ class _ProductDetailsPageState extends State<ProductDetailsPage>  {
           mainAxisAlignment: MainAxisAlignment.start,
           children: [
             Text(
-              'Ürün Yorumları',
+              'Ürün Yorumları ve Puanları',
               style: TextStyle(
                 color: AppColors.background,
                 fontSize: screenHeight * 0.021,
@@ -353,7 +346,7 @@ class _ProductDetailsPageState extends State<ProductDetailsPage>  {
             Container(
               width: screenWidth * 0.8,
               child: Text(
-                widget.product.description  == '' ? "Ürün açıklaması bulunmamaktadır." : widget.product.description,
+                (widget.product.description)  == '' ? "Ürün açıklaması bulunmamaktadır." : widget.product.description.substring(3, (widget.product.description).length - 5),
                 style: TextStyle(
                   color: AppColors.primary,
                   fontSize: screenHeight * 0.018,
@@ -550,9 +543,9 @@ class _ProductDetailsPageState extends State<ProductDetailsPage>  {
               backgroundColor: Color(0xffFBFBFB),
               elevation: 10,
               shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.vertical(
-                    top: Radius.circular(screenWidth * 0.05),
-                  )
+                borderRadius: BorderRadius.vertical(
+                  top: Radius.circular(screenWidth * 0.05),
+                ),
               ),
               action: SnackBarAction(
                 textColor: AppColors.highlighted,

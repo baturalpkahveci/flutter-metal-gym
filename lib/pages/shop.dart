@@ -84,72 +84,76 @@ class _ShopPageState extends State<ShopPage> {
       ),
       backgroundColor: AppColors.background,
       body: Container(
-        padding: const EdgeInsets.symmetric(horizontal: 15),
+        padding: EdgeInsets.symmetric(horizontal: screenWidth * 0.025,),
         child: Column(
           verticalDirection: VerticalDirection.down,
           children: [
-            const SizedBox(height: 15),
-            SearchBar(
-              leading: Container(
-                padding: EdgeInsets.all(10),
-                child: Icon(Icons.search),
-              ),
-              onSubmitted: (value) {
-                setState(() {
-                  _searchQuery = value;
-                });
-                print("Submitted query: $_searchQuery");
-                ///productProvider.fetchProducts(searchTerm: _searchQuery); // TO DO
-              },
-            ),
-            const SizedBox(height: 10),
-            const Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            Column(
               children: [
-                DropdownMenu(
-                    width: 150,
-                    hintText: "Kategori",
-                    helperText: "Kategori",
-                    initialSelection: "actual_data_0",
-                    dropdownMenuEntries: <DropdownMenuEntry<String>>[
-                      DropdownMenuEntry(value: "actual_data_0", label: "Hepsi"),
-                      DropdownMenuEntry(value: "actual_data_1", label: "Category1"),
-                      DropdownMenuEntry(value: "actual_data_2", label: "Category2")
-                    ]
+                SizedBox(height: screenHeight * 0.03,),
+                SearchBar(
+                  hintText: 'Ürün Ara...',
+                  leading: Container(
+                    padding: EdgeInsets.all(screenWidth * 0.025),
+                    child: Icon(Icons.search),
+                  ),
+                  onSubmitted: (value) {
+                    setState(() {
+                      _searchQuery = value;
+                    });
+                    print("Submitted query: $_searchQuery");
+                    ///productProvider.fetchProducts(searchTerm: _searchQuery); // TO DO
+                  },
                 ),
-                DropdownMenu(
-                    width: 150,
-                    hintText: "Sırala",
-                    helperText: "Sırala",
-                    dropdownMenuEntries: <DropdownMenuEntry<String>>[
-                      DropdownMenuEntry(value: "actual_data_0", label: "En popüler"),
-                      DropdownMenuEntry(value: "actual_data_1", label: "Artan"),
-                      DropdownMenuEntry(value: "actual_data_2", label: "Azalan")
-                    ]
-                )
+                SizedBox(height: screenHeight * 0.03,),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    DropdownMenu(
+                        width: screenWidth * 0.4,
+                        hintText: "Kategori",
+                        helperText: "Kategori",
+                        initialSelection: "actual_data_0",
+                        dropdownMenuEntries: <DropdownMenuEntry<String>>[
+                          DropdownMenuEntry(value: "actual_data_0", label: "Hepsi"),
+                          DropdownMenuEntry(value: "actual_data_1", label: "Category1"),
+                          DropdownMenuEntry(value: "actual_data_2", label: "Category2")
+                        ]
+                    ),
+                    DropdownMenu(
+                        width: screenWidth * 0.4,
+                        hintText: "Sırala",
+                        helperText: "Sırala",
+                        dropdownMenuEntries: <DropdownMenuEntry<String>>[
+                          DropdownMenuEntry(value: "actual_data_0", label: "En popüler"),
+                          DropdownMenuEntry(value: "actual_data_1", label: "Artan"),
+                          DropdownMenuEntry(value: "actual_data_2", label: "Azalan")
+                        ]
+                    )
+                  ],
+                ),
               ],
             ),
-            const SizedBox(height: 10),
+
+            SizedBox(height: screenHeight * 0.03,),
             //GET PRODUCTS
             productProvider.isLoading ? CircularProgressIndicator() : Container(
               child: Expanded(
-                  child: GridView.builder(
-                      gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                        crossAxisCount: crossAxisCount,
-                        childAspectRatio: childAspectRatio,
-                        crossAxisSpacing: 8.0,
-                        mainAxisSpacing: 8.0,
-                      ),
-                      itemCount: productProvider.products.length,
-                      itemBuilder: (context, index) {
-                        final product = productProvider.products[index];
-                        return ProductBox(product: product);
-                      },
-                  )
-
-
+                child: GridView.builder(
+                  gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                    crossAxisCount: 2,
+                    childAspectRatio: 0.48,
+                    crossAxisSpacing: screenWidth * 0.01,
+                    mainAxisSpacing: screenWidth * 0.01,
+                  ),
+                  itemCount: productProvider.products.length,
+                  itemBuilder: (context, index) {
+                    final product = productProvider.products[index];
+                    return ProductBox(product: product);
+                  },
+                ),
               ),
-            )
+            ),
           ],
         ),
       ),
@@ -197,5 +201,4 @@ void openGoogleMaps(String location) async {
     throw 'Could not launch $googleMapsUrl';
   }
 }
-
 

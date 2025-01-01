@@ -9,6 +9,9 @@ class ProductBox extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    // Calculate screen dimensions
+    final screenWidth = MediaQuery.of(context).size.width;
+    final screenHeight = MediaQuery.of(context).size.height;
 
     return GestureDetector(
       onTap: () {
@@ -19,65 +22,95 @@ class ProductBox extends StatelessWidget {
           MaterialPageRoute(builder: (context) => ProductDetailsPage(product: product,),)
         );
       },
-      child: Column(
-        children: [
-          ClipRRect(
-            borderRadius: BorderRadius.all(Radius.circular(15.0)),
-            child: Container(
-              constraints: BoxConstraints(maxHeight: 200),
-              child: Image.network(
-                "${product.imageUrl}?width=100&height=100",
-                loadingBuilder: (context, child, loadingProgress) {
-                  if (loadingProgress == null) return child;
-                  return Center(
-                    child: CircularProgressIndicator(
-                      value: loadingProgress.expectedTotalBytes != null
-                          ? loadingProgress.cumulativeBytesLoaded /
-                          (loadingProgress.expectedTotalBytes ?? 1)
-                          : null,
-                    ),
-                  );
-                },
-              )
-            ),
-          ),
-          SizedBox(height: 4),
-          Text(
-              product.name,
-              style: TextStyle(
-                shadows: [
-                  Shadow(
-                    color: Colors.black,
-                    blurRadius: 80
-                  )
-                ]
-              ),
-          ),
-          Row(
+      child: Container(
+        decoration: BoxDecoration(
+          color: Color(0xffEDEDED),
+          borderRadius: BorderRadius.circular(screenWidth * 0.03),
+
+          gradient: SweepGradient(
+            colors: [Color(0xffFBFBFB),Color(0xffFAFAFA), Color(0xffDDDDDD)],
+            center: Alignment.topRight, // Center of the sweep
+            startAngle: 0.0, // Start angle in radians
+            endAngle: 3.14// End angle in radians
+          )
+        ),
+        child: Padding(
+          padding: EdgeInsets.symmetric(horizontal: screenWidth * 0.025,),
+          child: Column(
             mainAxisAlignment: MainAxisAlignment.spaceEvenly,
             children: [
-              Text(
-                "${product.price} TL",
-                style: TextStyle(
-                    color: AppColors.priceColor,
+              Container(
+                width: double.infinity,
+                height: screenHeight * 0.3,
+                child: Image.network(
+                  "${product.imageUrl}?width=100&height=100",
+                  loadingBuilder: (context, child, loadingProgress) {
+                    if (loadingProgress == null) return child;
+                    return Center(
+                      child: CircularProgressIndicator(
+                        value: loadingProgress.expectedTotalBytes != null
+                            ? loadingProgress.cumulativeBytesLoaded /
+                            (loadingProgress.expectedTotalBytes ?? 1)
+                            : null,
+                      ),
+                    );
+                  },
                 ),
               ),
-              IconButton(
-                  style: ButtonStyle(
-                    backgroundColor: WidgetStatePropertyAll(AppColors.primary),
-                    iconSize: WidgetStatePropertyAll(15),
+              Column(
+                crossAxisAlignment: CrossAxisAlignment.center,
+                children: [
+                  Container(
+                    width: double.infinity,
+                    child: Text(
+                      product.name,
+                      style: TextStyle(
+                        fontSize: screenWidth * 0.04,
+                        fontWeight: FontWeight.bold,
+                      ),
+                      maxLines: 2,
+                      overflow: TextOverflow.ellipsis,
+                      softWrap: true,
+                    ),
                   ),
-                  constraints: BoxConstraints(maxHeight: 30,maxWidth: 30),
-                  onPressed: null,
-                  icon: Icon(
-                    Icons.add,
-                    color: AppColors.background,
-                  )
-              )
+                ],
+              ),
+              Divider(
+                color: AppColors.secondary,
+                thickness: 0.3,
+              ),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Text(
+                    "${product.price} TL",
+                    style: TextStyle(
+                      color: AppColors.priceColor,
+                      fontSize: screenWidth * 0.045,
+                    ),
+                  ),
+                  Container(
+                    width: screenWidth * 0.12,
+                    height: screenHeight * 0.04,
+                    decoration: BoxDecoration(
+                      color: AppColors.primary,
+                      borderRadius: BorderRadius.circular(screenWidth * 0.05),
+                    ),
+                    child: Center(
+                      child: Text(
+                        '${product.averageRating}',
+                        style: TextStyle(
+                          color: AppColors.background,
+                          fontSize: screenWidth * 0.05,
+                        ),
+                      ),
+                    ),
+                  ),
+                ],
+              ),
             ],
           ),
-      
-        ],
+        ),
       ),
     );
   }

@@ -51,7 +51,7 @@ class ProductCommentBox extends StatelessWidget {
                               style: TextStyle(
                                 color: AppColors.primary,
                                 fontFamily: 'liberation_sans',
-                                fontSize: 15,
+                                fontSize: screenWidth * 0.04,
                                 fontWeight: FontWeight.bold,
                               ),
                             ),
@@ -64,7 +64,7 @@ class ProductCommentBox extends StatelessWidget {
                               style: TextStyle(
                                 color: AppColors.primary.withOpacity(0.6),
                                 fontFamily: 'liberation_sans',
-                                fontSize: 12,
+                                fontSize: screenWidth * 0.03,
                                 fontWeight: FontWeight.w500,
                               ),
                             ),
@@ -88,7 +88,7 @@ class ProductCommentBox extends StatelessWidget {
                         comment,
                         style: TextStyle(
                           fontFamily: 'liberation_sans',
-                          fontSize: 14,
+                          fontSize: screenWidth * 0.035,
                           color: AppColors.primary,
                           fontWeight: FontWeight.w400,
                         ),
