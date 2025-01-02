@@ -7,7 +7,7 @@ import 'package:provider/provider.dart';
 
 class ShopPage extends StatefulWidget {
   const ShopPage({super.key});
-  //Iletisim bilgileri
+
   static const phoneNumber = "+905414105283";
   static const mail = "info@metalgymturkey.com";
   static const location = "Meriç Mah. 5646 Sokak No:19 Bornova/İzmir";
@@ -28,19 +28,21 @@ class _ShopPageState extends State<ShopPage> {
     }
   }
 
+  Future<void> _refreshPage() async {
+    final productProvider = Provider.of<ProductProvider>(context, listen: false);
+    await productProvider.fetchProducts(); // Refresh the products
+  }
+
   @override
   Widget build(BuildContext newContext) {
     final productProvider = Provider.of<ProductProvider>(context);
 
-    // Calculate screen dimensions
     final screenWidth = MediaQuery.of(context).size.width;
     final screenHeight = MediaQuery.of(context).size.height;
 
-    // Define the number of columns based on screen width
-    int crossAxisCount = (screenWidth / 150).floor(); // Adjust 200 based on your preferred item width
-    crossAxisCount = crossAxisCount < 1 ? 1 : crossAxisCount; // Ensure at least 1 column
+    int crossAxisCount = (screenWidth / 150).floor();
+    crossAxisCount = crossAxisCount < 1 ? 1 : crossAxisCount;
 
-    // Calculate childAspectRatio for each item to be responsive
     double childAspectRatio = screenWidth / (screenHeight / 1.5);
 
     return Scaffold(
@@ -83,62 +85,61 @@ class _ShopPageState extends State<ShopPage> {
         ],
       ),
       backgroundColor: AppColors.background,
-      body: Container(
-        padding: EdgeInsets.symmetric(horizontal: screenWidth * 0.025,),
-        child: Column(
-          verticalDirection: VerticalDirection.down,
-          children: [
-            Column(
-              children: [
-                SizedBox(height: screenHeight * 0.03,),
-                SearchBar(
-                  hintText: 'Ürün Ara...',
-                  leading: Container(
-                    padding: EdgeInsets.all(screenWidth * 0.025),
-                    child: Icon(Icons.search),
-                  ),
-                  onSubmitted: (value) {
-                    setState(() {
-                      _searchQuery = value;
-                    });
-                    print("Submitted query: $_searchQuery");
-                    ///productProvider.fetchProducts(searchTerm: _searchQuery); // TO DO
-                  },
-                ),
-                SizedBox(height: screenHeight * 0.03,),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    DropdownMenu(
-                        width: screenWidth * 0.4,
-                        hintText: "Kategori",
-                        helperText: "Kategori",
-                        initialSelection: "actual_data_0",
-                        dropdownMenuEntries: <DropdownMenuEntry<String>>[
-                          DropdownMenuEntry(value: "actual_data_0", label: "Hepsi"),
-                          DropdownMenuEntry(value: "actual_data_1", label: "Category1"),
-                          DropdownMenuEntry(value: "actual_data_2", label: "Category2")
-                        ]
+      body: RefreshIndicator(
+        onRefresh: _refreshPage, // Trigger the refresh
+        child: Container(
+          padding: EdgeInsets.symmetric(horizontal: screenWidth * 0.025),
+          child: Column(
+            verticalDirection: VerticalDirection.down,
+            children: [
+              Column(
+                children: [
+                  SizedBox(height: screenHeight * 0.03),
+                  SearchBar(
+                    hintText: 'Ürün Ara...',
+                    leading: Container(
+                      padding: EdgeInsets.all(screenWidth * 0.025),
+                      child: Icon(Icons.search),
                     ),
-                    DropdownMenu(
-                        width: screenWidth * 0.4,
-                        hintText: "Sırala",
-                        helperText: "Sırala",
-                        dropdownMenuEntries: <DropdownMenuEntry<String>>[
-                          DropdownMenuEntry(value: "actual_data_0", label: "En popüler"),
-                          DropdownMenuEntry(value: "actual_data_1", label: "Artan"),
-                          DropdownMenuEntry(value: "actual_data_2", label: "Azalan")
-                        ]
-                    )
-                  ],
-                ),
-              ],
-            ),
-
-            SizedBox(height: screenHeight * 0.03,),
-            //GET PRODUCTS
-            productProvider.isLoading ? CircularProgressIndicator() : Container(
-              child: Expanded(
+                    onSubmitted: (value) {
+                      setState(() {
+                        _searchQuery = value;
+                      });
+                      print("Submitted query: $_searchQuery");
+                    },
+                  ),
+                  SizedBox(height: screenHeight * 0.03),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      DropdownMenu(
+                          width: screenWidth * 0.4,
+                          hintText: "Kategori",
+                          helperText: "Kategori",
+                          initialSelection: "actual_data_0",
+                          dropdownMenuEntries: <DropdownMenuEntry<String>>[
+                            DropdownMenuEntry(value: "actual_data_0", label: "Hepsi"),
+                            DropdownMenuEntry(value: "actual_data_1", label: "Category1"),
+                            DropdownMenuEntry(value: "actual_data_2", label: "Category2")
+                          ]
+                      ),
+                      DropdownMenu(
+                          width: screenWidth * 0.4,
+                          hintText: "Sırala",
+                          helperText: "Sırala",
+                          dropdownMenuEntries: <DropdownMenuEntry<String>>[
+                            DropdownMenuEntry(value: "actual_data_0", label: "En popüler"),
+                            DropdownMenuEntry(value: "actual_data_1", label: "Artan"),
+                            DropdownMenuEntry(value: "actual_data_2", label: "Azalan")
+                          ]
+                      )
+                    ],
+                  ),
+                ],
+              ),
+              SizedBox(height: screenHeight * 0.03),
+              //GET PRODUCTS
+              productProvider.isLoading ? CircularProgressIndicator() : Expanded(
                 child: GridView.builder(
                   gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
                     crossAxisCount: 2,
@@ -153,15 +154,15 @@ class _ShopPageState extends State<ShopPage> {
                   },
                 ),
               ),
-            ),
-          ],
+            ],
+          ),
         ),
       ),
     );
   }
 }
 
-//LINK FUNCTIONS
+// LINK FUNCTIONS
 
 void launchWhatsApp(String phone) async {
   final whatsappUrl = "https://wa.me/$phone"; // phone number in international format
@@ -201,4 +202,3 @@ void openGoogleMaps(String location) async {
     throw 'Could not launch $googleMapsUrl';
   }
 }
-
