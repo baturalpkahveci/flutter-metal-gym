@@ -146,9 +146,9 @@ class _ShopPageState extends State<ShopPage> {
                     crossAxisSpacing: screenWidth * 0.01,
                     mainAxisSpacing: screenWidth * 0.01,
                   ),
-                  itemCount: productProvider.products.length,
+                  itemCount: productProvider.inStockProducts.length,
                   itemBuilder: (context, index) {
-                    final product = productProvider.products[index];
+                    final product = productProvider.inStockProducts[index];
                     return ProductBox(product: product);
                   },
                 ),

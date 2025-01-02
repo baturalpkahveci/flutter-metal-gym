@@ -9,7 +9,7 @@ class Category {
     required this.slug,
   });
 
-  // Factory method to parse JSON data into a Category object
+  // Convert JSON to Category
   factory Category.fromJson(Map<String, dynamic> json) {
     return Category(
       id: json['id'],
@@ -18,7 +18,7 @@ class Category {
     );
   }
 
-  // Convert Category object into JSON
+  // Convert Category to JSON
   Map<String, dynamic> toJson() {
     return {
       'id': id,

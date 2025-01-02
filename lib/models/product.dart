@@ -1,4 +1,4 @@
-import 'dart:ui';
+import 'package:metal_gym_mobile_application/models/category.dart';
 
 class Product {
   final int id; // Product ID
@@ -9,9 +9,9 @@ class Product {
   final double? salePrice; // Sale price (optional)
   final bool onSale; // Whether the product is on sale
   final String sku; // Stock Keeping Unit (SKU)
-  final int stockQuantity; // Quantity in stock
+  final int stockQuantity; // Quantity in stock (nullable)
   final bool inStock; // Whether the product is in stock
-  final String category; // Category name
+  final List<Category> categories; // List of Category objects
   final String imageUrl; // Main image URL
   final List<String> gallery; // List of additional image URLs
   final int totalSales; // Total sales count
@@ -19,6 +19,7 @@ class Product {
   final int ratingCount; // Number of ratings
   final bool isFeatured; // Whether the product is featured
   final List<String> tags; // List of product tags
+  final String permalink; // Product permalink URL
 
   Product({
     required this.id,
@@ -31,7 +32,7 @@ class Product {
     required this.sku,
     required this.stockQuantity,
     required this.inStock,
-    required this.category,
+    required this.categories, // List of categories (Category objects)
     required this.imageUrl,
     required this.gallery,
     required this.totalSales,
@@ -39,6 +40,7 @@ class Product {
     required this.ratingCount,
     required this.isFeatured,
     required this.tags,
+    required this.permalink,
   });
 
   // Factory method to parse JSON from API response
@@ -55,10 +57,10 @@ class Product {
       onSale: json['on_sale'] ?? false,
       sku: json['sku'] ?? '',
       stockQuantity: json['stock_quantity'] ?? 0,
-      inStock: json['in_stock'] ?? false,
-      category: (json['categories'] != null && json['categories'].isNotEmpty)
-          ? json['categories'][0]['name']
-          : 'Uncategorized',
+      inStock: json['stock_status'] == 'instock', // Mapping 'stock_status' field to inStock
+      categories: (json['categories'] as List)
+          .map<Category>((category) => Category.fromJson(category))
+          .toList(), // Map categories array to a list of Category objects
       imageUrl: (json['images'] != null && json['images'].isNotEmpty)
           ? "${json['images'][0]['src']}?width=300&height=300"
           : '',
@@ -69,12 +71,39 @@ class Product {
           : [],
       totalSales: json['total_sales'] ?? 0,
       averageRating: double.tryParse(
-          json['average_rating']?.toString() ?? '0.0') ?? 0.0,
+          json['average_rating']?.toString() ?? '0.0') ??
+          0.0,
       ratingCount: json['rating_count'] ?? 0,
       isFeatured: json['featured'] ?? false,
       tags: json['tags'] != null
           ? json['tags'].map<String>((tag) => tag['name'].toString()).toList()
           : [],
+      permalink: json['permalink'] ?? '', // Added permalink field
     );
+  }
+
+  // Convert Product to JSON
+  Map<String, dynamic> toJson() {
+    return {
+      'id': id,
+      'name': name,
+      'description': description,
+      'short_description': shortDescription,
+      'regular_price': price,
+      'sale_price': salePrice,
+      'on_sale': onSale,
+      'sku': sku,
+      'stock_quantity': stockQuantity,
+      'stock_status': inStock ? 'instock' : 'outofstock', // Mapping inStock to stock_status
+      'categories': categories.map((category) => category.toJson()).toList(), // Convert categories list to map
+      'image_url': imageUrl,
+      'gallery': gallery,
+      'total_sales': totalSales,
+      'average_rating': averageRating,
+      'rating_count': ratingCount,
+      'is_featured': isFeatured,
+      'tags': tags,
+      'permalink': permalink, // Include permalink in toJson
+    };
   }
 }

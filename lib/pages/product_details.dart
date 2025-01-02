@@ -1,6 +1,8 @@
 import 'package:custom_rating_bar/custom_rating_bar.dart';
 import 'package:flutter/material.dart';
 import 'package:metal_gym_mobile_application/common/widgets/image_panel.dart';
+import 'package:metal_gym_mobile_application/common/widgets/product_category_display.dart';
+import 'package:metal_gym_mobile_application/common/widgets/product_tags_display.dart';
 import 'package:metal_gym_mobile_application/core/app_colors.dart';
 import 'package:metal_gym_mobile_application/common/widgets/product_comment_box.dart';
 import 'package:metal_gym_mobile_application/models/product.dart';
@@ -269,22 +271,12 @@ class _ProductDetailsPageState extends State<ProductDetailsPage>  {
       ),
       child: Padding(
         padding: EdgeInsets.symmetric(horizontal: screenWidth * 0.05, vertical: screenHeight * 0.02),
-        child: Row(
+        child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           mainAxisAlignment: MainAxisAlignment.start,
           children: [
-            Container(
-              width: screenWidth * 0.8,
-              child: Text(
-                // Add product tags here.
-                '#urunetiketleri',
-                style: TextStyle(
-                  color: AppColors.primary,
-                  fontSize: screenHeight * 0.018,
-                ),
-                softWrap: true,
-              ),
-            ),
+            ProductTagsDisplay(tags: widget.product.tags),
+            ProductCategoriesDisplay(categories: widget.product.categories)
           ],
         ),
       ),
@@ -437,7 +429,7 @@ class _ProductDetailsPageState extends State<ProductDetailsPage>  {
               onTap: () {
                 // Handle tap event here.
                 setState(() {
-                  if (productAmount > 0) productAmount--;
+                  if (productAmount > 1) productAmount--;
                 });
                 print('Product amount decremented.');
               },
