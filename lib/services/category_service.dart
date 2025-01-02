@@ -3,9 +3,7 @@ import 'package:http/http.dart' as http;
 import 'package:metal_gym_mobile_application/models/category.dart';
 
 class CategoryService {
-  final String baseUrl;
-
-  CategoryService({required this.baseUrl});
+  final String baseUrl = 'https://mgbackend-czhf.onrender.com';
 
   // Fetch categories from backend
   Future<List<Category>> fetchCategories() async {

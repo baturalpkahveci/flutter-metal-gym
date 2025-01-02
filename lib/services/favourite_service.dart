@@ -3,9 +3,7 @@ import 'package:http/http.dart' as http;
 import 'package:metal_gym_mobile_application/models/favourite_product.dart';
 
 class FavoriteService {
-  final String baseUrl;
-
-  FavoriteService({required this.baseUrl});
+  final String baseUrl = 'https://mgbackend-czhf.onrender.com';
 
   // Add a product to favorites
   Future<List<int>> addToFavorites(int userId, int productId) async {

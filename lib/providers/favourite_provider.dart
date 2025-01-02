@@ -3,7 +3,7 @@ import 'package:metal_gym_mobile_application/services/favourite_service.dart';
 import 'package:metal_gym_mobile_application/models/favourite_product.dart';
 
 class FavoriteProvider with ChangeNotifier {
-  final FavoriteService favoriteService;
+  final FavoriteService favoriteService = FavoriteService();
   List<FavoriteProduct> _favoriteProducts = [];
   bool _isLoading = false;
   String _error = '';
@@ -11,8 +11,6 @@ class FavoriteProvider with ChangeNotifier {
   List<FavoriteProduct> get favoriteProducts => _favoriteProducts;
   bool get isLoading => _isLoading;
   String get error => _error;
-
-  FavoriteProvider({required this.favoriteService});
 
   // Fetch favorite products for a user
   Future<void> fetchFavoriteProducts(int userId) async {

@@ -3,7 +3,7 @@ import 'package:metal_gym_mobile_application/models/category.dart';
 import 'package:metal_gym_mobile_application/services/category_service.dart';
 
 class CategoryProvider with ChangeNotifier {
-  final CategoryService categoryService;
+  final CategoryService categoryService = CategoryService();
   List<Category> _categories = [];
   bool _isLoading = false;
   String _error = '';
@@ -11,9 +11,7 @@ class CategoryProvider with ChangeNotifier {
   List<Category> get categories => _categories;
   bool get isLoading => _isLoading;
   String get error => _error;
-
-  CategoryProvider({required this.categoryService});
-
+  
   // Fetch categories
   Future<void> fetchCategories() async {
     _isLoading = true;
@@ -26,6 +24,7 @@ class CategoryProvider with ChangeNotifier {
       _error = e.toString();
     }
 
+    print("Categories found: ${categories.length}");
     _isLoading = false;
     notifyListeners();
   }
