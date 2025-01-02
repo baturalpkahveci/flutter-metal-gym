@@ -24,10 +24,6 @@ class _CategoriesPageState extends State<CategoriesPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: const Text('Categories'),
-        backgroundColor: AppColors.primary,
-      ),
       body: SingleChildScrollView(
         child: Column(
           children: [
