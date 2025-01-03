@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:metal_gym_mobile_application/core/app_colors.dart';
+import 'package:metal_gym_mobile_application/providers/cart_provider.dart';
 import 'package:metal_gym_mobile_application/providers/category_provider.dart';
 import 'package:metal_gym_mobile_application/providers/favourite_provider.dart';
 import 'package:metal_gym_mobile_application/providers/order_provider.dart';
@@ -30,6 +31,7 @@ class MyApp extends StatelessWidget {
           ChangeNotifierProvider(create: (_) => FavoriteProvider()),
           ChangeNotifierProvider(create: (_) => OrderProvider()),
           ChangeNotifierProvider(create: (_) => CategoryProvider()),
+          ChangeNotifierProvider(create: (_) => CartProvider()),
         ])
       ],
       child: MaterialApp(

@@ -15,7 +15,7 @@ class CartService {
     for (var cartItem in cartList) {
       final cartItemMap = json.decode(cartItem);
       final existingItem = CartItem.fromJson(cartItemMap);
-      if (existingItem.productId == item.productId) {
+      if (existingItem.product.id == item.product.id) {  // Compare by product ID
         itemExists = true;
         // Update the quantity of the existing item
         existingItem.quantity += item.quantity;
@@ -51,7 +51,7 @@ class CartService {
     cartList.removeWhere((item) {
       final cartItemMap = json.decode(item);
       final cartItem = CartItem.fromJson(cartItemMap);
-      return cartItem.productId == productId;
+      return cartItem.product.id == productId; // Compare by product ID
     });
 
     await prefs.setStringList(_cartKey, cartList); // Save to SharedPreferences
