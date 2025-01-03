@@ -16,7 +16,7 @@ class ProductBox extends StatelessWidget {
     return GestureDetector(
       onTap: () {
         // Handle tap event here.
-        print('Product tapped!');
+        print('Product tapped: ${product.name}');
         Navigator.push(
           context,
           MaterialPageRoute(builder: (context) => ProductDetailsPage(product: product,),)
@@ -24,15 +24,13 @@ class ProductBox extends StatelessWidget {
       },
       child: Container(
         decoration: BoxDecoration(
-          color: Color(0xffEDEDED),
           borderRadius: BorderRadius.circular(screenWidth * 0.03),
-
           gradient: SweepGradient(
             colors: [Color(0xffFBFBFB),Color(0xffFAFAFA), Color(0xffDDDDDD)],
             center: Alignment.topRight, // Center of the sweep
             startAngle: 0.0, // Start angle in radians
             endAngle: 3.14// End angle in radians
-          )
+          ),
         ),
         child: Padding(
           padding: EdgeInsets.symmetric(horizontal: screenWidth * 0.025,),
