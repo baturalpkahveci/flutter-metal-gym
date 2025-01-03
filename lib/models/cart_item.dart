@@ -1,22 +1,18 @@
+import 'package:metal_gym_mobile_application/models/product.dart';
+
 class CartItem {
-  final int productId;
-  final String name;
-  final double price;
+  final Product product;
   int quantity;
 
   CartItem({
-    required this.productId,
-    required this.name,
-    required this.price,
+    required this.product,
     required this.quantity,
   });
 
   // Convert CartItem to a Map (for storage)
   Map<String, dynamic> toJson() {
     return {
-      'productId': productId,
-      'name': name,
-      'price': price,
+      'product': product.toJson(),  // Convert the Product object to a Map
       'quantity': quantity,
     };
   }
@@ -24,9 +20,7 @@ class CartItem {
   // Convert a Map to CartItem
   factory CartItem.fromJson(Map<String, dynamic> json) {
     return CartItem(
-      productId: json['productId'],
-      name: json['name'],
-      price: json['price'],
+      product: Product.fromJson(json['product']),  // Deserialize Product
       quantity: json['quantity'],
     );
   }

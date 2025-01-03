@@ -5,7 +5,10 @@ import 'package:metal_gym_mobile_application/common/widgets/product_category_dis
 import 'package:metal_gym_mobile_application/common/widgets/product_tags_display.dart';
 import 'package:metal_gym_mobile_application/core/app_colors.dart';
 import 'package:metal_gym_mobile_application/common/widgets/product_comment_box.dart';
+import 'package:metal_gym_mobile_application/models/cart_item.dart';
 import 'package:metal_gym_mobile_application/models/product.dart';
+import 'package:metal_gym_mobile_application/providers/cart_provider.dart';
+import 'package:provider/provider.dart';
 
 class ProductDetailsPage extends StatefulWidget {
   const ProductDetailsPage({super.key, required this.product});
@@ -28,6 +31,8 @@ class _ProductDetailsPageState extends State<ProductDetailsPage>  {
   Widget build(BuildContext context)  {
     final double screenWidth = MediaQuery.of(context).size.width;
     final double screenHeight = MediaQuery.of(context).size.height;
+
+    var cartProvider = Provider.of<CartProvider>(context);
 
     return Scaffold(
       body: ListView(
@@ -55,7 +60,7 @@ class _ProductDetailsPageState extends State<ProductDetailsPage>  {
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
                     _productAmount(screenWidth, screenHeight),
-                    _addShoppingListButton(screenWidth, screenHeight),
+                    _addShoppingListButton(screenWidth, screenHeight, cartProvider),
                   ],
                 ),
                 SizedBox(height: screenHeight * 0.05,),
@@ -352,38 +357,42 @@ class _ProductDetailsPageState extends State<ProductDetailsPage>  {
     );
   }
 
-  GestureDetector _addShoppingListButton(double screenWidth, double screenHeight) {
+  GestureDetector _addShoppingListButton(double screenWidth, double screenHeight, CartProvider cartProvider) {
     return GestureDetector(
       onTap: () {
         // Handle tap event here.
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(
-            content: Text(
-              '$productAmount adet ${widget.product.name} sepetinize eklendi',
-              style: TextStyle(
-                color: AppColors.primary,
-                fontSize: screenWidth * 0.04,
+        if (productAmount > 0) {
+          cartProvider.addToCart(CartItem(product: widget.product , quantity: productAmount));
+          ScaffoldMessenger.of(context).showSnackBar(
+            SnackBar(
+              content: Text(
+                '$productAmount adet ${widget.product.name} sepetinize eklendi',
+                style: TextStyle(
+                  color: AppColors.primary,
+                  fontSize: screenWidth * 0.04,
+                ),
+              ),
+              duration: Duration(seconds: 2),
+              backgroundColor: Color(0xffFBFBFB),
+              elevation: 10,
+              shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.vertical(
+                    top: Radius.circular(screenWidth * 0.05),
+                  )
+              ),
+              action: SnackBarAction(
+                textColor: AppColors.highlighted,
+                label: 'Geri Al',
+                onPressed: () {
+                  // Handle the "UNDO" action
+                  cartProvider.removeFromCart(widget.product.id);
+                  print('Undo action performed');
+                },
               ),
             ),
-            duration: Duration(seconds: 2),
-            backgroundColor: Color(0xffFBFBFB),
-            elevation: 10,
-            shape: RoundedRectangleBorder(
-              borderRadius: BorderRadius.vertical(
-                top: Radius.circular(screenWidth * 0.05),
-              )
-            ),
-            action: SnackBarAction(
-              textColor: AppColors.highlighted,
-              label: 'Geri Al',
-              onPressed: () {
-                // Handle the "UNDO" action
-                print('Undo action performed');
-              },
-            ),
-          ),
-        );
-        print('Added to shopping list successfully!');
+          );
+          print("$productAmount products added to cart.");
+        }
       },
       child: Container(
         height: screenHeight * 0.07,
