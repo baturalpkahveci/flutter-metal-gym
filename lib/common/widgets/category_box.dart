@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:metal_gym_mobile_application/core/app_colors.dart';
 import 'package:metal_gym_mobile_application/models/category.dart';
 
 class CategoryBox extends StatelessWidget {
@@ -10,9 +11,7 @@ class CategoryBox extends StatelessWidget {
   Widget build(BuildContext context) {
     // Get screen width to make it responsive
     final screenWidth = MediaQuery.of(context).size.width;
-
-    // Set the size of the box (e.g., 1/3 of the screen width)
-    double boxSize = screenWidth / 3;
+    final double screenHeight = MediaQuery.of(context).size.height;
 
     return GestureDetector(
       onTap: () {
@@ -20,54 +19,70 @@ class CategoryBox extends StatelessWidget {
         print('Category tapped: ${category.name}');
       },
       child: Container(
-        width: boxSize, // Set width of the container
         decoration: BoxDecoration(
-          color: Colors.white,
-          borderRadius: BorderRadius.circular(15), // Rounded corners for the container
-          boxShadow: const [
-            BoxShadow(
-              color: Colors.grey,
-              blurRadius: 5.0,
-              offset: Offset(0, 3), // Shadow position
-            ),
-          ],
+          borderRadius: BorderRadius.circular(screenWidth * 0.03),
+          gradient: SweepGradient(
+              colors: [Color(0xffFBFBFB),Color(0xffFAFAFA), Color(0xffDDDDDD)],
+              center: Alignment.topRight, // Center of the sweep
+              startAngle: 0.0, // Start angle in radians
+              endAngle: 3.14// End angle in radians
+          ),
         ),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.center,
-          children: [
-            // Image Section
-            ClipRRect(
-              borderRadius: BorderRadius.circular(15.0), // Rounded corners for the image
-              child: category.imageUrl.isNotEmpty
-                  ? Image.network(
-                category.imageUrl,
-                fit: BoxFit.cover, // Image should cover the entire container area
-                width: boxSize, // Set the image width to match the container width
-                height: boxSize, // Set the image height to match the container height
-              )
-                  : const Image(
-                image: AssetImage("assets/images/promotional1.jpg"),
-                fit: BoxFit.cover,
+        child: Padding(
+          padding: EdgeInsets.symmetric(horizontal: screenWidth * 0.03,),
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+            children: [
+              Container(
                 width: double.infinity,
-                height: double.infinity,
-              ),
-            ),
-            const SizedBox(height: 8),
-            // Text Section
-            Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 8.0),
-              child: Text(
-                category.name,
-                textAlign: TextAlign.center, // Center the text
-                style: const TextStyle(
-                  color: Colors.black,
-                  fontSize: 16, // Text size
-                  fontWeight: FontWeight.bold,
+                height: screenHeight * 0.18,
+                child: Image.network(
+                  fit: BoxFit.fill,
+                  "${category.imageUrl}?width=100&height=100",
+                  loadingBuilder: (context, child, loadingProgress) {
+                    if (loadingProgress == null) return child;
+                    return Center(
+                      child: CircularProgressIndicator(
+                        value: loadingProgress.expectedTotalBytes != null
+                            ? loadingProgress.cumulativeBytesLoaded /
+                            (loadingProgress.expectedTotalBytes ?? 1)
+                            : null,
+                      ),
+                    );
+                  },
                 ),
               ),
-            ),
-          ],
+              Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Container(
+                    width: double.infinity,
+                    child: Text(
+                      category.name,
+                      style: TextStyle(
+                        fontSize: screenWidth * 0.04,
+                        fontWeight: FontWeight.bold,
+                      ),
+                      softWrap: true,
+                    ),
+                  ),
+                  Container(
+                    width: double.infinity,
+                    child: Text(
+                      'Toplam ${category.productCount} ürün',
+                      style: TextStyle(
+                        fontSize: screenWidth * 0.025,
+                        fontWeight: FontWeight.w500,
+                      ),
+                      softWrap: true,
+                    ),
+                  ),
+                ],
+              ),
+            ],
+          ),
         ),
+
       ),
     );
   }

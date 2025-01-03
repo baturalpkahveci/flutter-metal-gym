@@ -50,7 +50,7 @@ class _ProductDetailsPageState extends State<ProductDetailsPage>  {
                     _productPrice(screenWidth, screenHeight),
                   ],
                 ),
-                SizedBox(height: screenHeight * 0.04,),
+                SizedBox(height: screenHeight * 0.03,),
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
@@ -58,21 +58,28 @@ class _ProductDetailsPageState extends State<ProductDetailsPage>  {
                     _addShoppingListButton(screenWidth, screenHeight),
                   ],
                 ),
-                SizedBox(height: screenHeight * 0.05,),
+                SizedBox(height: screenHeight * 0.03,),
                 Column(
                   children: [
                     _productInfoHeader(screenWidth, screenHeight),
                     _productInfo(screenWidth, screenHeight),
                   ],
                 ),
-                SizedBox(height: screenHeight * 0.05,),
+                SizedBox(height: screenHeight * 0.01,),
+                Column(
+                  children: [
+                    _productCategoriesHeader(screenWidth, screenHeight),
+                    _productCategories(screenWidth, screenHeight),
+                  ],
+                ),
+                SizedBox(height: screenHeight * 0.01,),
                 Column(
                   children: [
                     _productTagsHeader(screenWidth, screenHeight),
                     _productTags(screenWidth, screenHeight),
                   ],
                 ),
-                SizedBox(height: screenHeight * 0.05,),
+                SizedBox(height: screenHeight * 0.01,),
                 Column(
                   children: [
                     _productCommentsHeader(screenHeight, screenWidth),
@@ -352,6 +359,65 @@ class _ProductDetailsPageState extends State<ProductDetailsPage>  {
     );
   }
 
+  Container _productCategoriesHeader(double screenWidth, double screenHeight) {
+    return Container(
+      height: screenHeight * 0.07,
+      width: double.maxFinite,
+      decoration: BoxDecoration(
+        color: AppColors.primary,
+        borderRadius: BorderRadius.vertical(
+          top: Radius.circular(screenWidth * 0.05),
+        ),
+      ),
+      child: Padding(
+        padding: EdgeInsets.only(left: screenWidth * 0.05),
+        child: Row(
+          crossAxisAlignment: CrossAxisAlignment.center,
+          mainAxisAlignment: MainAxisAlignment.start,
+          children: [
+            Text(
+              'Ürün Etiketleri',
+              style: TextStyle(
+                color: AppColors.background,
+                fontSize: screenHeight * 0.021,
+                fontWeight: FontWeight.bold,
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+
+  Container _productCategories(double screenWidth, double screenHeight) {
+    return Container(
+      width: double.maxFinite,
+      decoration: BoxDecoration(
+        color: AppColors.background,
+        borderRadius: BorderRadius.vertical(
+          bottom: Radius.circular(screenWidth * 0.05),
+        ),
+        boxShadow: [
+          BoxShadow(
+            color: Colors.black.withOpacity(0.1),
+            blurRadius: 20,
+            spreadRadius: screenWidth * 0.025,
+          ),
+        ],
+      ),
+      child: Padding(
+        padding: EdgeInsets.symmetric(horizontal: screenWidth * 0.05, vertical: screenHeight * 0.02),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          mainAxisAlignment: MainAxisAlignment.start,
+          children: [
+            ProductCategoriesDisplay(categories: widget.product.categories)
+          ],
+        ),
+      ),
+    );
+  }
+
   GestureDetector _addShoppingListButton(double screenWidth, double screenHeight) {
     return GestureDetector(
       onTap: () {
@@ -519,7 +585,7 @@ class _ProductDetailsPageState extends State<ProductDetailsPage>  {
   Positioned _addToFavoritesButton(double screenWidth, double screenHeight) {
     return Positioned(
       top: screenHeight * (0.5 - 0.07),
-      right: 0,
+      left: screenWidth * (1 - 0.4),
       child: GestureDetector(
         onTap: () {
           ScaffoldMessenger.of(context).showSnackBar(
@@ -575,13 +641,13 @@ class _ProductDetailsPageState extends State<ProductDetailsPage>  {
                 Icon(
                   Icons.add_circle_rounded,
                   color: AppColors.secondary,
-                  size: screenWidth * 0.06,
+                  size: screenWidth * 0.04,
                 ),
                 Text(
                   'Favorilere Ekle',
                   style: TextStyle(
                     color: AppColors.secondary,
-                    fontSize: screenWidth * 0.045,
+                    fontSize: screenWidth * 0.04,
                     fontWeight: FontWeight.bold,
                   ),
                 ),
