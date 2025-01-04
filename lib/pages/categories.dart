@@ -95,7 +95,7 @@ class _CategoriesPageState extends State<CategoriesPage> {
             ),
             // Categories Grid
             Padding(
-              padding: EdgeInsets.all(20),
+              padding: EdgeInsets.symmetric(horizontal: screenWidth * 0.025),
               child: Consumer<CategoryProvider>(
                 builder: (context, categoryProvider, child) {
                   if (categoryProvider.isLoading) {
