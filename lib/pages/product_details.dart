@@ -288,7 +288,6 @@ class _ProductDetailsPageState extends State<ProductDetailsPage>  {
           mainAxisAlignment: MainAxisAlignment.start,
           children: [
             ProductTagsDisplay(tags: widget.product.tags),
-            ProductCategoriesDisplay(categories: widget.product.categories)
           ],
         ),
       ),
@@ -381,7 +380,7 @@ class _ProductDetailsPageState extends State<ProductDetailsPage>  {
           mainAxisAlignment: MainAxisAlignment.start,
           children: [
             Text(
-              'Ürün Etiketleri',
+              'Ürün Kategorileri',
               style: TextStyle(
                 color: AppColors.background,
                 fontSize: screenHeight * 0.021,
@@ -422,8 +421,6 @@ class _ProductDetailsPageState extends State<ProductDetailsPage>  {
       ),
     );
   }
-
-  
 
   GestureDetector _addShoppingListButton(double screenWidth, double screenHeight, CartProvider cartProvider) {
     return GestureDetector(
