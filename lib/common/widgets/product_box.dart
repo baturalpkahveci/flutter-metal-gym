@@ -18,8 +18,8 @@ class ProductBox extends StatelessWidget {
         // Handle tap event here.
         print('Product tapped: ${product.name}');
         Navigator.push(
-          context,
-          MaterialPageRoute(builder: (context) => ProductDetailsPage(product: product,),)
+            context,
+            MaterialPageRoute(builder: (context) => ProductDetailsPage(product: product,),)
         );
       },
       child: Container(
@@ -63,6 +63,7 @@ class ProductBox extends StatelessWidget {
                     child: Text(
                       product.name,
                       style: TextStyle(
+                        color: AppColors.primary,
                         fontSize: screenWidth * 0.04,
                         fontWeight: FontWeight.bold,
                       ),
