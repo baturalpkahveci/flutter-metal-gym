@@ -1,9 +1,11 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:metal_gym_mobile_application/common/widgets/product_box.dart';
 import 'package:metal_gym_mobile_application/core/app_colors.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:metal_gym_mobile_application/providers/product_provider.dart';
 import 'package:provider/provider.dart';
+import 'package:metal_gym_mobile_application/providers/category_provider.dart';
 
 class ShopPage extends StatefulWidget {
   const ShopPage({super.key});
@@ -18,13 +20,21 @@ class ShopPage extends StatefulWidget {
 
 class _ShopPageState extends State<ShopPage> {
   String _searchQuery = '';
+  String _selectedCategory = 'all';
+  String _selectedOrder = 'popular';
 
   @override
   void didChangeDependencies() {
     super.didChangeDependencies();
     final productProvider = Provider.of<ProductProvider>(context, listen: false);
+    final categoryProvider = Provider.of<CategoryProvider>(context, listen: false);
+
     if (productProvider.products.isEmpty) {
       productProvider.fetchProducts();
+    }
+
+    if (categoryProvider.categories.isEmpty) {
+      categoryProvider.fetchCategories();
     }
   }
 
@@ -36,6 +46,7 @@ class _ShopPageState extends State<ShopPage> {
   @override
   Widget build(BuildContext newContext) {
     final productProvider = Provider.of<ProductProvider>(context);
+    final categoryProvider = Provider.of<CategoryProvider>(context);
 
     final screenWidth = MediaQuery.of(context).size.width;
     final screenHeight = MediaQuery.of(context).size.height;
@@ -48,37 +59,36 @@ class _ShopPageState extends State<ShopPage> {
         title: const Text('MetalGYM'),
         actions: [
           IconButton(
-              onPressed: () {
-                showAboutDialog(
-                    context: context,
-                    applicationName: "MetalGYM",
-                    applicationVersion: "0.1",
-                    children: [
-                      ListTile(
-                        leading: Icon(Icons.phone),
-                        title: Text("Whatsapp İletişim Hattı: " + ShopPage.phoneNumber),
-                        onTap: () {
-                          launchWhatsApp(ShopPage.phoneNumber);
-                        },
-                      ),
-                      ListTile(
-                        leading: Icon(Icons.mail),
-                        title: Text("Mail: " + ShopPage.mail),
-                        onTap: () {
-                          launchEmail(ShopPage.mail);
-                        },
-                      ),
-                      ListTile(
-                        leading: Icon(Icons.location_on),
-                        title: Text(ShopPage.location),
-                        onTap: () {
-                          openGoogleMaps(ShopPage.location);
-                        },
-                      )
-                    ]
-                );
-              },
-              icon: Icon(Icons.phone)
+            onPressed: () {
+              showAboutDialog(
+                  context: context,
+                  applicationName: "MetalGYM",
+                  applicationVersion: "0.1",
+                  children: [
+                    ListTile(
+                      leading: Icon(Icons.phone),
+                      title: Text("Whatsapp İletişim Hattı: " + ShopPage.phoneNumber),
+                      onTap: () {
+                        launchWhatsApp(ShopPage.phoneNumber);
+                      },
+                    ),
+                    ListTile(
+                      leading: Icon(Icons.mail),
+                      title: Text("Mail: " + ShopPage.mail),
+                      onTap: () {
+                        launchEmail(ShopPage.mail);
+                      },
+                    ),
+                    ListTile(
+                      leading: Icon(Icons.location_on),
+                      title: Text(ShopPage.location),
+                      onTap: () {
+                        openGoogleMaps(ShopPage.location);
+                      },
+                    ),
+                  ]);
+            },
+            icon: Icon(Icons.phone),
           )
         ],
       ),
@@ -108,46 +118,97 @@ class _ShopPageState extends State<ShopPage> {
                   ),
                   SizedBox(height: screenHeight * 0.03),
                   Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    mainAxisAlignment: MainAxisAlignment.spaceAround,
                     children: [
-                      DropdownMenu(
-                          width: screenWidth * 0.4,
-                          hintText: "Kategori",
-                          helperText: "Kategori",
-                          initialSelection: "actual_data_0",
-                          dropdownMenuEntries: <DropdownMenuEntry<String>>[
-                            DropdownMenuEntry(value: "actual_data_0", label: "Hepsi"),
-                            DropdownMenuEntry(value: "actual_data_1", label: "Category1"),
-                            DropdownMenuEntry(value: "actual_data_2", label: "Category2")
-                          ]
+                      // Category Dropdown
+                      Flexible(
+                        child: DropdownButton<String>(
+                          value: _selectedCategory,
+                          icon: const Icon(Icons.apps_outlined),
+                          iconDisabledColor: AppColors.priceColor,
+                          iconEnabledColor: AppColors.highlighted,
+                          iconSize: 24,
+                          elevation: 16,
+                          style: const TextStyle(color: AppColors.priceColor),
+                          underline: Container(
+                            height: 2,
+                            color: AppColors.highlighted,
+                          ),
+                          dropdownColor: AppColors.primary,
+
+                          onChanged: (newValue) {
+                            setState(() {
+                              _selectedCategory = newValue!;
+                            });
+                            productProvider.filterAndSortProducts(
+                              category: _selectedCategory,
+                              sortOrder: _selectedOrder,
+                            );
+                          },
+                          items: [
+                            DropdownMenuItem(value: 'all', child: Text("Hepsi")),
+                            ...categoryProvider.categories.map(
+                                  (category) => DropdownMenuItem(
+                                value: category.slug,
+                                child: Text(category.name),
+                              ),
+                            )
+                          ],
+                        ),
                       ),
-                      DropdownMenu(
-                          width: screenWidth * 0.4,
-                          hintText: "Sırala",
-                          helperText: "Sırala",
-                          dropdownMenuEntries: <DropdownMenuEntry<String>>[
-                            DropdownMenuEntry(value: "actual_data_0", label: "En popüler"),
-                            DropdownMenuEntry(value: "actual_data_1", label: "Artan"),
-                            DropdownMenuEntry(value: "actual_data_2", label: "Azalan")
-                          ]
-                      )
+                      SizedBox(width: screenWidth * 0.02), // Add spacing between dropdowns
+                      // Sort Order Dropdown
+                      Flexible(
+                        child: DropdownButton<String>(
+                          value: _selectedOrder,
+                          icon: const Icon(Icons.sort_by_alpha),
+                          iconDisabledColor: AppColors.priceColor,
+                          iconEnabledColor: AppColors.highlighted,
+                          iconSize: 24,
+                          elevation: 16,
+                          style: const TextStyle(color: AppColors.priceColor),
+                          underline: Container(
+                            height: 2,
+                            color: AppColors.highlighted,
+                          ),
+                          dropdownColor: AppColors.primary,
+
+                          onChanged: (newValue) {
+                            setState(() {
+                              _selectedOrder = newValue!;
+                            });
+                            productProvider.filterAndSortProducts(
+                              category: _selectedCategory,
+                              sortOrder: _selectedOrder,
+                            );
+                          },
+                          items: [
+                            DropdownMenuItem(value: 'popular', child: Text("En Popüler")),
+                            DropdownMenuItem(value: 'ascending', child: Text("Artan")),
+                            DropdownMenuItem(value: 'descending', child: Text("Azalan")),
+                            DropdownMenuItem(value: 'alphabetical', child: Text("Varsayılan Sıralama")),
+                          ],
+                        ),
+                      ),
                     ],
-                  ),
+                  )
                 ],
               ),
               SizedBox(height: screenHeight * 0.03),
-              //GET PRODUCTS
-              productProvider.isLoading ? CircularProgressIndicator() : Expanded(
+              // Get Products
+              productProvider.isLoading
+                  ? CircularProgressIndicator()
+                  : Expanded(
                 child: GridView.builder(
                   gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                    crossAxisCount: 2,
+                    crossAxisCount: crossAxisCount,
                     childAspectRatio: 0.48,
                     crossAxisSpacing: screenWidth * 0.01,
                     mainAxisSpacing: screenWidth * 0.01,
                   ),
-                  itemCount: productProvider.inStockProducts.length,
+                  itemCount: productProvider.products.length,
                   itemBuilder: (context, index) {
-                    final product = productProvider.inStockProducts[index];
+                    final product = productProvider.products[index];
                     return ProductBox(product: product);
                   },
                 ),

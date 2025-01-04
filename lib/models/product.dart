@@ -20,6 +20,8 @@ class Product {
   final bool isFeatured; // Whether the product is featured
   final List<String> tags; // List of product tags
   final String permalink; // Product permalink URL
+  final String dateCreated; // The date the product was created
+  final String status; // The status of the product (e.g. "publish")
 
   Product({
     required this.id,
@@ -32,7 +34,7 @@ class Product {
     required this.sku,
     required this.stockQuantity,
     required this.inStock,
-    required this.categories, // List of categories (Category objects)
+    required this.categories,
     required this.imageUrl,
     required this.gallery,
     required this.totalSales,
@@ -41,6 +43,8 @@ class Product {
     required this.isFeatured,
     required this.tags,
     required this.permalink,
+    required this.dateCreated, // Added date_created field
+    required this.status, // Added status field
   });
 
   // Factory method to parse JSON from API response
@@ -79,6 +83,8 @@ class Product {
           ? json['tags'].map<String>((tag) => tag['name'].toString()).toList()
           : [],
       permalink: json['permalink'] ?? '', // Added permalink field
+      dateCreated: json['date_created'] ?? '', // Added date_created field
+      status: json['status'] ?? 'publish', // Added status field
     );
   }
 
@@ -95,7 +101,7 @@ class Product {
       'sku': sku,
       'stock_quantity': stockQuantity,
       'stock_status': inStock ? 'instock' : 'outofstock', // Mapping inStock to stock_status
-      'categories': categories.map((category) => category.toJson()).toList(), // Convert categories list to map
+      'categories': categories.map((category) => category.toJson()).toList(),
       'image_url': imageUrl,
       'gallery': gallery,
       'total_sales': totalSales,
@@ -104,6 +110,8 @@ class Product {
       'is_featured': isFeatured,
       'tags': tags,
       'permalink': permalink, // Include permalink in toJson
+      'date_created': dateCreated, // Added date_created field to JSON
+      'status': status, // Added status field to JSON
     };
   }
 }
