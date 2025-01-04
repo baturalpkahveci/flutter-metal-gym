@@ -1,4 +1,3 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:metal_gym_mobile_application/common/widgets/product_box.dart';
 import 'package:metal_gym_mobile_application/core/app_colors.dart';
@@ -22,6 +21,7 @@ class _ShopPageState extends State<ShopPage> {
   String _searchQuery = '';
   String _selectedCategory = 'all';
   String _selectedOrder = 'popular';
+  bool _isLoadingNextPage = false;  // Flag for pagination loading
 
   @override
   void didChangeDependencies() {
@@ -30,17 +30,26 @@ class _ShopPageState extends State<ShopPage> {
     final categoryProvider = Provider.of<CategoryProvider>(context, listen: false);
 
     if (productProvider.products.isEmpty) {
-      productProvider.fetchProducts();
+      productProvider.fetchProducts();  // Fetch initial products
     }
 
     if (categoryProvider.categories.isEmpty) {
-      categoryProvider.fetchCategories();
+      categoryProvider.fetchCategories();  // Fetch categories if not already available
     }
   }
 
   Future<void> _refreshPage() async {
     final productProvider = Provider.of<ProductProvider>(context, listen: false);
-    await productProvider.fetchProducts(); // Refresh the products
+    productProvider.resetPageAndProducts(); // Reset page and products
+
+    // Fetch the first page of products again with the current selected category and order
+    await productProvider.fetchProducts();
+
+    // Apply filters and sorting based on the selected category and order
+    productProvider.filterAndSortProducts(
+      category: _selectedCategory,
+      sortOrder: _selectedOrder,
+    );
   }
 
   @override
@@ -113,7 +122,8 @@ class _ShopPageState extends State<ShopPage> {
                       setState(() {
                         _searchQuery = value;
                       });
-                      print("Submitted query: $_searchQuery");
+                      // Call the search function when a new query is submitted
+                      productProvider.searchProducts(_searchQuery);
                     },
                   ),
                   SizedBox(height: screenHeight * 0.03),
@@ -140,6 +150,7 @@ class _ShopPageState extends State<ShopPage> {
                             setState(() {
                               _selectedCategory = newValue!;
                             });
+                            // Apply filter with the current selected category
                             productProvider.filterAndSortProducts(
                               category: _selectedCategory,
                               sortOrder: _selectedOrder,
@@ -177,6 +188,7 @@ class _ShopPageState extends State<ShopPage> {
                             setState(() {
                               _selectedOrder = newValue!;
                             });
+                            // Apply sorting with the current selected order
                             productProvider.filterAndSortProducts(
                               category: _selectedCategory,
                               sortOrder: _selectedOrder,
@@ -191,7 +203,7 @@ class _ShopPageState extends State<ShopPage> {
                         ),
                       ),
                     ],
-                  )
+                  ),
                 ],
               ),
               SizedBox(height: screenHeight * 0.03),
@@ -211,6 +223,21 @@ class _ShopPageState extends State<ShopPage> {
                     final product = productProvider.products[index];
                     return ProductBox(product: product);
                   },
+                  // Pagination
+                  controller: ScrollController()
+                    ..addListener(() {
+                      if (_isLoadingNextPage == false &&
+                          productProvider.products.length > 0 &&
+                          productProvider.products.length % 20 == 0 &&
+                          !productProvider.isLoading) {
+                        _isLoadingNextPage = true;
+                        productProvider.loadNextPage(_searchQuery).then((_) {
+                          setState(() {
+                            _isLoadingNextPage = false;
+                          });
+                        });
+                      }
+                    }),
                 ),
               ),
             ],

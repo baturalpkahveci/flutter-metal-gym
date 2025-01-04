@@ -5,8 +5,9 @@ import 'package:metal_gym_mobile_application/models/product.dart';
 class ProductService {
   final String baseUrl = 'https://mgbackend-czhf.onrender.com'; // Replace with your server URL
 
+  //THIS IS BUGGED - USE FETCH PRODUCTS INSTEAD
   // Fetch products from the API
-  Future<List<Product>> fetchProducts() async {
+  Future<List<Product>> fetchAllProducts() async {
     final response = await http.get(Uri.parse('$baseUrl/products'));
     print("FetchProducts response length: ${response.contentLength}");
 
@@ -15,6 +16,30 @@ class ProductService {
       return data.map((json) => Product.fromJson(json)).toList();
     } else {
       throw Exception('Failed to load products');
+    }
+  }
+
+  // Fetch products with pagination
+  Future<List<Product>> fetchProducts({required int page, required int perPage}) async {
+    final response = await http.get(Uri.parse('$baseUrl/products?page=$page&perPage=$perPage'));
+
+    if (response.statusCode == 200) {
+      final List<dynamic> data = json.decode(response.body);
+      return data.map((json) => Product.fromJson(json)).toList();
+    } else {
+      throw Exception('Failed to load products');
+    }
+  }
+
+  // Search products with query
+  Future<List<Product>> searchProducts(String query, int page, int perPage) async {
+    final response = await http.get(Uri.parse('$baseUrl/api/products/search?query=$query&page=$page&perPage=$perPage'));
+
+    if (response.statusCode == 200) {
+      final List<dynamic> data = json.decode(response.body);
+      return data.map((json) => Product.fromJson(json)).toList();
+    } else {
+      throw Exception('Failed to search products');
     }
   }
 }
