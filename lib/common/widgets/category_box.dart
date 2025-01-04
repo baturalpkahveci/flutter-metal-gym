@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:metal_gym_mobile_application/core/app_colors.dart';
 import 'package:metal_gym_mobile_application/models/category.dart';
+import 'package:metal_gym_mobile_application/pages/shop.dart';
 
 class CategoryBox extends StatelessWidget {
   final Category category;
@@ -15,7 +16,7 @@ class CategoryBox extends StatelessWidget {
 
     return GestureDetector(
       onTap: () {
-        // Handle the tap event here
+        // Handle the tap event here.
         print('Category tapped: ${category.name}');
       },
       child: Container(
