@@ -23,6 +23,9 @@ class _CategoriesPageState extends State<CategoriesPage> {
 
   @override
   Widget build(BuildContext context) {
+    final screenWidth = MediaQuery.of(context).size.width;
+    final screenHeight = MediaQuery.of(context).size.height;
+
     return Scaffold(
       body: SingleChildScrollView(
         child: Column(
@@ -103,10 +106,10 @@ class _CategoriesPageState extends State<CategoriesPage> {
                     return Expanded(
                       child: GridView.builder(
                         gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                          crossAxisCount: 3, // Adjust for 3 columns
-                          mainAxisSpacing: 10,
-                          crossAxisSpacing: 10,
-                          childAspectRatio: 1 / 1,
+                          crossAxisCount: 2,
+                          mainAxisSpacing: screenWidth * 0.01,
+                          crossAxisSpacing: screenWidth * 0.01,
+                          childAspectRatio: 0.65,
                         ),
                         shrinkWrap: true,
                         physics: const NeverScrollableScrollPhysics(), // Prevent scrolling for parent widget

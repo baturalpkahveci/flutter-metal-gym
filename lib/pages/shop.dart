@@ -43,8 +43,6 @@ class _ShopPageState extends State<ShopPage> {
     int crossAxisCount = (screenWidth / 150).floor();
     crossAxisCount = crossAxisCount < 1 ? 1 : crossAxisCount;
 
-    double childAspectRatio = screenWidth / (screenHeight / 1.5);
-
     return Scaffold(
       appBar: AppBar(
         title: const Text('MetalGYM'),
