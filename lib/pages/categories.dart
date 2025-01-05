@@ -28,17 +28,7 @@ class _CategoriesPageState extends State<CategoriesPage> {
 
     return Scaffold(
       body: Container(
-        // Gradient Background
-        decoration: const BoxDecoration(
-          gradient: LinearGradient(
-            colors: [
-              AppColors.primary, // Start color of the gradient
-              AppColors.secondary, // End color of the gradient
-            ],
-            begin: Alignment.topCenter, // Starting point of the gradient
-            end: Alignment.bottomCenter, // Ending point of the gradient
-          ),
-        ),
+        color: AppColors.background,
         child: Consumer<CategoryProvider>(
           builder: (context, categoryProvider, child) {
             return SingleChildScrollView(
@@ -46,14 +36,18 @@ class _CategoriesPageState extends State<CategoriesPage> {
                 children: [
                   // Header Section
                   Container(
-                    constraints: const BoxConstraints.expand(height: 200),
+                    height: screenHeight * 0.25,
+                    width: screenWidth,
                     decoration: const BoxDecoration(
                       color: Colors.black,
                       boxShadow: [
-                        BoxShadow(color: Colors.black, blurRadius: 30)
+                        BoxShadow(
+                          color: Colors.black,
+                          blurRadius: 30,
+                        ),
                       ],
                     ),
-                    child: const Column(
+                    child: Column(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
                         Text(
@@ -61,7 +55,7 @@ class _CategoriesPageState extends State<CategoriesPage> {
                           style: TextStyle(
                             color: AppColors.background,
                             fontFamily: "Designer",
-                            fontSize: 36,
+                            fontSize: screenWidth * 0.1,
                             shadows: [
                               Shadow(color: Colors.white, blurRadius: 30)
                             ],
@@ -71,7 +65,8 @@ class _CategoriesPageState extends State<CategoriesPage> {
                           "Fiyatlarımıza KDV dahil değildir.",
                           style: TextStyle(
                             color: AppColors.background,
-                            fontSize: 12,
+                            fontSize: screenWidth * 0.03,
+                            fontWeight: FontWeight.bold,
                           ),
                         ),
                       ],
@@ -79,7 +74,8 @@ class _CategoriesPageState extends State<CategoriesPage> {
                   ),
                   // Sales Button Section
                   Container(
-                    constraints: const BoxConstraints.expand(height: 50),
+                    height: screenHeight * 0.08,
+                    width: screenWidth,
                     decoration: const BoxDecoration(
                       color: AppColors.highlighted,
                       boxShadow: [
@@ -93,13 +89,18 @@ class _CategoriesPageState extends State<CategoriesPage> {
                           onPressed: () {
                             // Implement the action for sale categories
                           },
-                          child: const Text(
+                          child: Text(
                             "İndirimli Ürünler",
                             style: TextStyle(
                               color: AppColors.background,
+                              fontSize: screenWidth * 0.045,
+                              fontWeight: FontWeight.bold,
                               shadows: [
-                                Shadow(color: AppColors.background, blurRadius: 5),
-                                Shadow(color: AppColors.background, blurRadius: 5)
+                                Shadow(
+                                  color: AppColors.primary.withOpacity(0.2),
+                                  blurRadius: 10,
+                                  offset: Offset(5, 5),
+                                ),
                               ],
                             ),
                           ),
