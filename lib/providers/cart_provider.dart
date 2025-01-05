@@ -24,6 +24,7 @@ class CartProvider with ChangeNotifier {
     print("${item.quantity} items added to the cart: ${item.product.name}");
     await _cartService.addToCart(item);
     await loadCartItems(); // Reload the cart after adding an item
+    notifyListeners();
   }
 
   // Remove an item from the cart
@@ -31,6 +32,7 @@ class CartProvider with ChangeNotifier {
     print("Item ${productId} removed from the cart.");
     await _cartService.removeFromCart(productId);
     await loadCartItems(); // Reload the cart after removing an item
+    notifyListeners();
   }
 
   // Clear all items in the cart
@@ -40,4 +42,27 @@ class CartProvider with ChangeNotifier {
     _cartItems.clear(); // Clear the cart list in the provider
     notifyListeners();
   }
+
+  // Increment the quantity of a product in the cart
+  Future<void> incrementQuantity(int productId) async {
+    try {
+      await _cartService.incrementQuantity(productId);
+      await loadCartItems(); // Reload cart to reflect the changes
+      notifyListeners();
+    } catch (e) {
+      debugPrint('Error incrementing quantity: $e');
+    }
+  }
+
+// Decrement the quantity of a product in the cart
+  Future<void> decrementQuantity(int productId) async {
+    try {
+      await _cartService.decrementQuantity(productId);
+      await loadCartItems(); // Reload cart to reflect the changes
+      notifyListeners();
+    } catch (e) {
+      debugPrint('Error decrementing quantity: $e');
+    }
+  }
+
 }

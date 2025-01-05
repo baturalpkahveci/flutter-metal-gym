@@ -1,3 +1,4 @@
+import 'package:flutter/cupertino.dart';
 import 'package:metal_gym_mobile_application/models/category.dart';
 
 class Product {
@@ -9,7 +10,7 @@ class Product {
   final double? salePrice; // Sale price (optional)
   final bool onSale; // Whether the product is on sale
   final String sku; // Stock Keeping Unit (SKU)
-  final int stockQuantity; // Quantity in stock (nullable)
+  final int stockQuantity; // Quantity in stock
   final bool inStock; // Whether the product is in stock
   final List<Category> categories; // List of Category objects
   final String imageUrl; // Main image URL
@@ -21,7 +22,7 @@ class Product {
   final List<String> tags; // List of product tags
   final String permalink; // Product permalink URL
   final String dateCreated; // The date the product was created
-  final String status; // The status of the product (e.g. "publish")
+  final String status; // The status of the product (e.g., "publish")
 
   Product({
     required this.id,
@@ -48,6 +49,34 @@ class Product {
   });
 
   factory Product.fromJson(Map<String, dynamic> json) {
+    debugPrint('Parsing Product from JSON: $json'); // Log the entire product JSON
+
+    // Handle tags
+    final tags = (json['tags'] as List<dynamic>?)
+        ?.map((tag) {
+      if (tag is Map<String, dynamic> && tag['name'] is String) {
+        return tag['name'] as String; // Extract the name
+      } else {
+        debugPrint('Invalid tag format: $tag');
+        return null; // Skip invalid entries
+      }
+    })
+        .whereType<String>() // Filter out null values
+        .toList() ?? [];
+
+    // Handle images with validation
+    final gallery = (json['images'] as List<dynamic>?)
+        ?.map((image) {
+      if (image is Map<String, dynamic> && image['src'] is String) {
+        return "${image['src']}?width=300&height=300";
+      } else {
+        debugPrint('Invalid gallery image format: $image');
+        return null; // Skip invalid entries
+      }
+    })
+        .whereType<String>() // Filter out null values
+        .toList() ?? [];
+
     return Product(
       id: json['id'] as int,
       name: json['name'] as String,
@@ -68,25 +97,21 @@ class Product {
       imageUrl: (json['images'] != null && json['images'].isNotEmpty)
           ? "${json['images'][0]['src']}?width=300&height=300"
           : '',
-      gallery: (json['images'] as List<dynamic>?)
-          ?.map((image) => "${image['src']}?width=300&height=300")
-          .toList() ??
-          [],
+      gallery: gallery,
       totalSales: json['total_sales'] ?? 0,
       averageRating:
       double.tryParse(json['average_rating']?.toString() ?? '0.0') ?? 0.0,
       ratingCount: json['rating_count'] ?? 0,
       isFeatured: json['featured'] ?? false,
-      tags: (json['tags'] as List<dynamic>?)
-          ?.map((tag) => tag['name'].toString())
-          .toList() ??
-          [],
+      tags: tags,
       permalink: json['permalink'] ?? '',
       dateCreated: json['date_created'] ?? '',
       status: json['status'] ?? 'publish',
     );
   }
 
+
+  /// Convert Product to JSON
   Map<String, dynamic> toJson() {
     return {
       'id': id,

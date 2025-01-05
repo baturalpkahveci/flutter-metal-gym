@@ -116,7 +116,9 @@ class CartProductBox extends StatelessWidget {
                       GestureDetector(
                         onTap: () {
                           // Handle tap event here.
-                          print('Product amount decremented.');
+                          cartProvider.decrementQuantity(cartItem.product.id);
+                          print('Product amount decremented to ${cartItem.quantity}');
+
                         },
                         child: CircleAvatar(
                           radius: screenWidth * 0.04,
@@ -132,7 +134,8 @@ class CartProductBox extends StatelessWidget {
                       GestureDetector(
                         onTap: () {
                           // Handle tap event here.
-                          print('Product amount incremented.');
+                          cartProvider.incrementQuantity(cartItem.product.id);
+                          print('Product amount incremented to ${cartItem.quantity}');
                         },
                         child: CircleAvatar(
                           radius: screenWidth * 0.04,

@@ -11,50 +11,34 @@ class CartService {
     try {
       final prefs = await SharedPreferences.getInstance();
       List<String> cartList = prefs.getStringList(_cartKey) ?? [];
+      debugPrint('Current cartList: $cartList'); // Log current cart state
 
-      bool itemExists = false;
-
-      // Debug: Print the current cart list
-      debugPrint('Current cartList: $cartList');
-
-      // Iterate through the cartList and check for an existing item
       for (int i = 0; i < cartList.length; i++) {
-        final cartItemMap = json.decode(cartList[i]);
-
-        if (cartItemMap is! Map<String, dynamic>) {
-          throw Exception('Invalid cart item format: $cartItemMap');
-        }
-
-        final existingItem = CartItem.fromJson(cartItemMap);
-
-        if (existingItem.product.id == item.product.id) {
-          // Update the quantity of the existing item
-          itemExists = true;
-          debugPrint('Item exists. Updating quantity.');
-          existingItem.quantity += item.quantity;
-
-          // Safely update the item in the list
-          cartList[i] = json.encode(existingItem.toJson());
-          debugPrint('Updated item at index $i: ${cartList[i]}');
-          break;
+        try {
+          final cartItemMap = json.decode(cartList[i]);
+          final existingItem = CartItem.fromJson(cartItemMap);
+          if (existingItem.product.id == item.product.id) {
+            existingItem.quantity += item.quantity;
+            cartList[i] = json.encode(existingItem.toJson());
+            debugPrint('Updated cart item: ${cartList[i]}'); // Log updated item
+            await prefs.setStringList(_cartKey, cartList);
+            return;
+          }
+        } catch (e) {
+          debugPrint('Error parsing cart item at index $i: $e');
         }
       }
 
-      // If the item doesn't exist, add it to the cart list
-      if (!itemExists) {
-        debugPrint('Item does not exist. Adding new item.');
-        cartList.add(json.encode(item.toJson()));
-        debugPrint('Added new item: ${cartList.last}');
-      }
-
-      // Save the updated cart list to SharedPreferences
+      // Add new item if not found
+      cartList.add(json.encode(item.toJson()));
       await prefs.setStringList(_cartKey, cartList);
-      debugPrint('Cart updated successfully: $cartList');
+      debugPrint('Added new item to cart: ${item.toJson()}'); // Log new item
     } catch (e, stackTrace) {
       debugPrint('Error in addToCart: $e\n$stackTrace');
-      throw Exception('Failed to add item to cart: ${e.toString()}');
+      throw Exception('Failed to add item to cart: $e');
     }
   }
+
 
 
 
@@ -63,20 +47,30 @@ class CartService {
     try {
       final prefs = await SharedPreferences.getInstance();
       List<String> cartList = prefs.getStringList(_cartKey) ?? [];
-      debugPrint('Cart data from SharedPreferences: $cartList'); // Debug log
+      debugPrint('Raw cartList from SharedPreferences: $cartList');
 
       return cartList.map((item) {
-        final decodedItem = json.decode(item);
-        if (decodedItem is! Map<String, dynamic>) {
-          throw Exception('Invalid item format: $decodedItem');
+        try {
+          final decodedItem = json.decode(item); // Decode JSON string
+          debugPrint('Decoded cart item: $decodedItem');
+
+          // Validate decoded item structure
+          if (decodedItem is! Map<String, dynamic>) {
+            throw Exception('Invalid cart item format: $decodedItem');
+          }
+
+          return CartItem.fromJson(decodedItem);
+        } catch (e) {
+          debugPrint('Error decoding cart item: $e');
+          throw Exception('Failed to decode cart item: $e');
         }
-        return CartItem.fromJson(decodedItem);
       }).toList();
     } catch (e, stackTrace) {
-      debugPrint('Error in getCartItems: $e\n$stackTrace'); // Detailed debug log
+      debugPrint('Error in getCartItems: $e\n$stackTrace');
       throw Exception('Failed to retrieve cart items: ${e.toString()}');
     }
   }
+
 
 
   // Remove item from the cart
@@ -111,4 +105,59 @@ class CartService {
       throw Exception('Failed to clear the cart: ${e.toString()}');
     }
   }
+
+  // Increment the quantity of a product in the cart
+  Future<void> incrementQuantity(int productId) async {
+    try {
+      final prefs = await SharedPreferences.getInstance();
+      List<String> cartList = prefs.getStringList(_cartKey) ?? [];
+
+      for (int i = 0; i < cartList.length; i++) {
+        final cartItemMap = json.decode(cartList[i]);
+        final cartItem = CartItem.fromJson(cartItemMap);
+
+        if (cartItem.product.id == productId) {
+          cartItem.quantity += 1; // Increment quantity
+          cartList[i] = json.encode(cartItem.toJson());
+          await prefs.setStringList(_cartKey, cartList);
+          return;
+        }
+      }
+
+      throw Exception('Product with ID $productId not found in cart');
+    } catch (e) {
+      throw Exception('Failed to increment quantity: ${e.toString()}');
+    }
+  }
+
+// Decrement the quantity of a product in the cart
+  Future<void> decrementQuantity(int productId) async {
+    try {
+      final prefs = await SharedPreferences.getInstance();
+      List<String> cartList = prefs.getStringList(_cartKey) ?? [];
+
+      for (int i = 0; i < cartList.length; i++) {
+        final cartItemMap = json.decode(cartList[i]);
+        final cartItem = CartItem.fromJson(cartItemMap);
+
+        if (cartItem.product.id == productId) {
+          if (cartItem.quantity > 1) {
+            cartItem.quantity -= 1; // Decrement quantity
+            cartList[i] = json.encode(cartItem.toJson());
+          } else {
+            // Remove the item if quantity drops to 0
+            cartList.removeAt(i);
+          }
+
+          await prefs.setStringList(_cartKey, cartList);
+          return;
+        }
+      }
+
+      throw Exception('Product with ID $productId not found in cart');
+    } catch (e) {
+      throw Exception('Failed to decrement quantity: ${e.toString()}');
+    }
+  }
+
 }
