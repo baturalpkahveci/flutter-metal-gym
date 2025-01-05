@@ -103,7 +103,6 @@ class CartProductBox extends StatelessWidget {
                               fontSize: screenWidth * 0.045,
                               fontWeight: FontWeight.bold,
                             ),
-                            softWrap: false,
                           ),
                         ),
                       ),
