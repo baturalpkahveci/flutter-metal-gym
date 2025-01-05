@@ -43,15 +43,14 @@ class Product {
     required this.isFeatured,
     required this.tags,
     required this.permalink,
-    required this.dateCreated, // Added date_created field
-    required this.status, // Added status field
+    required this.dateCreated,
+    required this.status,
   });
 
-  // Factory method to parse JSON from API response
   factory Product.fromJson(Map<String, dynamic> json) {
     return Product(
-      id: json['id'],
-      name: json['name'],
+      id: json['id'] as int,
+      name: json['name'] as String,
       description: json['description'] ?? '',
       shortDescription: json['short_description'] ?? '',
       price: double.tryParse(json['regular_price']?.toString() ?? '0.0') ?? 0.0,
@@ -61,34 +60,33 @@ class Product {
       onSale: json['on_sale'] ?? false,
       sku: json['sku'] ?? '',
       stockQuantity: json['stock_quantity'] ?? 0,
-      inStock: json['stock_status'] == 'instock', // Mapping 'stock_status' field to inStock
-      categories: (json['categories'] as List)
-          .map<Category>((category) => Category.fromJson(category))
-          .toList(), // Map categories array to a list of Category objects
+      inStock: json['stock_status'] == 'instock',
+      categories: (json['categories'] as List<dynamic>?)
+          ?.map((category) => Category.fromJson(category))
+          .toList() ??
+          [],
       imageUrl: (json['images'] != null && json['images'].isNotEmpty)
           ? "${json['images'][0]['src']}?width=300&height=300"
           : '',
-      gallery: json['images'] != null
-          ? json['images']
-          .map<String>((image) => "${image['src']}?width=300&height=300")
-          .toList()
-          : [],
+      gallery: (json['images'] as List<dynamic>?)
+          ?.map((image) => "${image['src']}?width=300&height=300")
+          .toList() ??
+          [],
       totalSales: json['total_sales'] ?? 0,
-      averageRating: double.tryParse(
-          json['average_rating']?.toString() ?? '0.0') ??
-          0.0,
+      averageRating:
+      double.tryParse(json['average_rating']?.toString() ?? '0.0') ?? 0.0,
       ratingCount: json['rating_count'] ?? 0,
       isFeatured: json['featured'] ?? false,
-      tags: json['tags'] != null
-          ? json['tags'].map<String>((tag) => tag['name'].toString()).toList()
-          : [],
-      permalink: json['permalink'] ?? '', // Added permalink field
-      dateCreated: json['date_created'] ?? '', // Added date_created field
-      status: json['status'] ?? 'publish', // Added status field
+      tags: (json['tags'] as List<dynamic>?)
+          ?.map((tag) => tag['name'].toString())
+          .toList() ??
+          [],
+      permalink: json['permalink'] ?? '',
+      dateCreated: json['date_created'] ?? '',
+      status: json['status'] ?? 'publish',
     );
   }
 
-  // Convert Product to JSON
   Map<String, dynamic> toJson() {
     return {
       'id': id,
@@ -100,7 +98,7 @@ class Product {
       'on_sale': onSale,
       'sku': sku,
       'stock_quantity': stockQuantity,
-      'stock_status': inStock ? 'instock' : 'outofstock', // Mapping inStock to stock_status
+      'stock_status': inStock ? 'instock' : 'outofstock',
       'categories': categories.map((category) => category.toJson()).toList(),
       'image_url': imageUrl,
       'gallery': gallery,
@@ -109,9 +107,9 @@ class Product {
       'rating_count': ratingCount,
       'is_featured': isFeatured,
       'tags': tags,
-      'permalink': permalink, // Include permalink in toJson
-      'date_created': dateCreated, // Added date_created field to JSON
-      'status': status, // Added status field to JSON
+      'permalink': permalink,
+      'date_created': dateCreated,
+      'status': status,
     };
   }
 }

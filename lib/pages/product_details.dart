@@ -456,7 +456,6 @@ class _ProductDetailsPageState extends State<ProductDetailsPage>  {
               ),
             ),
           );
-          print("$productAmount products added to cart.");
         }
       },
       child: Container(

@@ -21,18 +21,21 @@ class CartProvider with ChangeNotifier {
 
   // Add an item to the cart
   Future<void> addToCart(CartItem item) async {
+    print("${item.quantity} items added to the cart: ${item.product.name}");
     await _cartService.addToCart(item);
     await loadCartItems(); // Reload the cart after adding an item
   }
 
   // Remove an item from the cart
   Future<void> removeFromCart(int productId) async {
+    print("Item ${productId} removed from the cart.");
     await _cartService.removeFromCart(productId);
     await loadCartItems(); // Reload the cart after removing an item
   }
 
   // Clear all items in the cart
   Future<void> clearCart() async {
+    print("Cart cleared.");
     await _cartService.clearCart();
     _cartItems.clear(); // Clear the cart list in the provider
     notifyListeners();

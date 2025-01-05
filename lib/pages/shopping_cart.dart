@@ -23,6 +23,15 @@ class ShoppingCart extends StatelessWidget {
     return Scaffold(
       appBar: AppBar(
         title: const Text("Sepetim"),
+        actions: [
+          TextButton(
+              onPressed: () {
+                print("Clear cart button pressed...");
+                cartProvider.clearCart();
+              },
+              child: Text("Sepeti temizle")
+          )
+        ],
       ),
       body: Column(
         children: [

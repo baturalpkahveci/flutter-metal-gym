@@ -15,19 +15,17 @@ class Category {
     required this.productCount,
   });
 
-  // Factory method to parse JSON into Category
   factory Category.fromJson(Map<String, dynamic> json) {
     return Category(
-      id: json['id'],
-      name: json['name'],
-      slug: json['slug'],
+      id: json['id'] as int,
+      name: json['name'] as String,
+      slug: json['slug'] as String,
       description: json['description'] ?? '',
-      imageUrl: json['image'] != null ? json['image']['src'] : '',
+      imageUrl: json['image']?['src'] ?? '',
       productCount: json['count'] ?? 0,
     );
   }
 
-  // Convert Category to JSON
   Map<String, dynamic> toJson() {
     return {
       'id': id,
