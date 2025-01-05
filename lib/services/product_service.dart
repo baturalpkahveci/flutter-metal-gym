@@ -13,9 +13,9 @@ class ProductService {
     if (response.statusCode == 200) {
       List<dynamic> data = jsonDecode(response.body);
 
-      // Filter out products based on status and inStock
+      // Filter out products based on status and stock_status
       final filteredData = data.where((json) =>
-      json['status'] == 'publish' && json['inStock'] == 'instock');
+      json['status'] == 'publish' && json['stock_status'] == 'instock');
 
       return filteredData.map((json) => Product.fromJson(json)).toList();
     } else {
@@ -29,11 +29,11 @@ class ProductService {
 
     if (response.statusCode == 200) {
       final List<dynamic> data = json.decode(response.body);
-
-      // Filter out products based on status and inStock
+      print("Products found: ${data.length}");
+      // Filter out products based on status and stock_status
       final filteredData = data.where((json) =>
-      json['status'] == 'publish' && json['inStock'] == 'instock');
-
+      json['status'] == 'publish' && json['stock_status'] == 'instock');
+      print("Filtered products: ${filteredData.length}");
       return filteredData.map((json) => Product.fromJson(json)).toList();
     } else {
       throw Exception('Failed to load products');
@@ -47,9 +47,9 @@ class ProductService {
     if (response.statusCode == 200) {
       final List<dynamic> data = json.decode(response.body);
 
-      // Filter out products based on status and inStock
+      // Filter out products based on status and stock_status
       final filteredData = data.where((json) =>
-      json['status'] == 'publish' && json['inStock'] == 'instock');
+      json['status'] == 'publish' && json['stock_status'] == 'instock');
 
       return filteredData.map((json) => Product.fromJson(json)).toList();
     } else {
