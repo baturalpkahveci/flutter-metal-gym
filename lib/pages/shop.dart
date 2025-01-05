@@ -139,7 +139,7 @@ class _ShopPageState extends State<ShopPage> {
                           iconEnabledColor: AppColors.highlighted,
                           iconSize: 24,
                           elevation: 16,
-                          style: const TextStyle(color: AppColors.priceColor),
+                          style: const TextStyle(color: AppColors.priceColor, fontSize: 12),
                           underline: Container(
                             height: 2,
                             color: AppColors.highlighted,
@@ -177,7 +177,7 @@ class _ShopPageState extends State<ShopPage> {
                           iconEnabledColor: AppColors.highlighted,
                           iconSize: 24,
                           elevation: 16,
-                          style: const TextStyle(color: AppColors.priceColor),
+                          style: const TextStyle(color: AppColors.priceColor, fontSize: 12),
                           underline: Container(
                             height: 2,
                             color: AppColors.highlighted,
